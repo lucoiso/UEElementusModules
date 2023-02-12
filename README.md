@@ -4,7 +4,9 @@
 An Unreal Engine plugin containing all modules and dependencies that were created for [Project Elementus](https://github.com/lucoiso/UEProject_Elementus).
 
 # About
-[Project Elementus](https://github.com/lucoiso/UEProject_Elementus) is a third person template that can be used to start projects that will use some new features that come with Unreal Engine 5 as well as powerful existing features like the Gameplay Ability System and others. and now, all it's contents were turned into a plugin containing modules accordingly to it's objective.
+[Project Elementus](https://github.com/lucoiso/UEProject_Elementus) was intended to be a third person template that can be used to start projects that will use some new features that come with Unreal Engine 5 as well as powerful existing features like the Gameplay Ability System and others. **And now, all it's contents were turned into this plugin containing modules accordingly to it's objective!** :)
+
+As a plugin, it is easier to organize, update and insert the content into already existing projects, facilitating maintenance and usability.
 
 ## Modules
 * **Elementus Ability System:** Adds custom classes, structures and functions related to Gameplay Ability System.
