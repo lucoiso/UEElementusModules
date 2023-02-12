@@ -24,6 +24,7 @@ An Unreal Engine plugin containing all modules and dependencies that were create
 ## Requirements
 * Unreal Engine 5.1+.
 * Visual Studio 2019 or 2022 with the module Game Development with C++.
+* Git w/ Git LFS.
 
 # Installation
 ## Download as Zip
