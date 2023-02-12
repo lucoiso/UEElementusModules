@@ -1,4 +1,6 @@
 # Unreal Engine Plugin: Elementus Modules
+![HighresScreenshot00001](https://user-images.githubusercontent.com/77353979/218318475-cb5c7f62-8ec8-43a3-a4a1-6b4b5104a362.png)
+
 An Unreal Engine plugin containing all modules and dependencies that were created for [Project Elementus](https://github.com/lucoiso/UEProject_Elementus).
 
 # About
@@ -14,14 +16,14 @@ An Unreal Engine plugin containing all modules and dependencies that were create
 
 # Dependencies
 ## Submodules
-* [Modular Features - Extra Actions:](https://github.com/lucoiso/UEModularFeatures_ExtraActions) Provides Modular integration of GAS and Enhanced Input
+* [Modular Features - Extra Actions:](https://github.com/lucoiso/UEModularFeatures_ExtraActions) Provides Modular integration of GAS and Enhanced Input.
 * [Elementus Inventory:](https://github.com/lucoiso/UEElementusInventory) Provides a Data-Driven Inventory & Items system based on FPrimaryAssetIds and the Asset Manager.
 * [EOS SDK Handler:](https://github.com/lucoiso/UEEOSSDKHandler) Handle the EOS SDK, define the use of EOS tools and give access to some private headers.
 * [FSR 1.0 (Custom):](https://github.com/lucoiso/UEFSR) Adapted version of the original AMD FSR 1.0 plugin for UE4 to properly work in Unreal Engine 5.
 
 ## Requirements
-* Visual Studio 2019 or 2022 with the module Game Development with C++.
 * Unreal Engine 5.1+.
+* Visual Studio 2019 or 2022 with the module Game Development with C++.
 
 # Installation
 ## Download as Zip
