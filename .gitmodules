@@ -1,0 +1,16 @@
+[submodule "Dependencies/UEModularFeatures_ExtraActions"]
+	path = Dependencies/UEModularFeatures_ExtraActions
+	url = https://github.com/lucoiso/UEModularFeatures_ExtraActions.git
+	branch = development
+[submodule "Dependencies/UEElementusInventory"]
+	path = Dependencies/UEElementusInventory
+	url = https://github.com/lucoiso/UEElementusInventory.git
+	branch = development
+[submodule "Dependencies/UEEOSSDKHandler"]
+	path = Dependencies/UEEOSSDKHandler
+	url = https://github.com/lucoiso/UEEOSSDKHandler.git
+	branch = main
+[submodule "Dependencies/UEFSR"]
+	path = Dependencies/UEFSR
+	url = https://github.com/lucoiso/UEFSR.git
+	branch = main
