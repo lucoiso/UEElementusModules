@@ -12,3 +12,6 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogElementusCore, Display, All);
 DECLARE_LOG_CATEGORY_EXTERN(LogElementusCore_Internal, NoLogging, All);
+
+DECLARE_LOG_CATEGORY_EXTERN(LogController_Base, NoLogging, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogController_Axis, NoLogging, All);

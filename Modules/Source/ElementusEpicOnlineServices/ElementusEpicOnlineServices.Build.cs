@@ -27,7 +27,8 @@ public class ElementusEpicOnlineServices : ModuleRules
 			"Engine",
 			"NetCore",
 			"CoreUObject",
-			"JsonUtilities"
+			"JsonUtilities",
+			"DeveloperSettings"
 		});
 
 		SetupIrisSupport(Target);

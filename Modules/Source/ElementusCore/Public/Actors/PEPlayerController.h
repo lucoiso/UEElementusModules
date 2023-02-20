@@ -10,14 +10,12 @@
 #include <Interfaces/MFEA_AbilityInputBinding.h>
 #include <Interfaces/PEElementusInventoryProcessor.h>
 #include <Management/ElementusInventoryData.h>
+#include "LogElementusCore.h"
 #include "PEPlayerController.generated.h"
 
 /**
  *
  */
-DECLARE_LOG_CATEGORY_EXTERN(LogController_Base, Display, All);
-
-DECLARE_LOG_CATEGORY_EXTERN(LogController_Axis, NoLogging, All);
 
 #define CONTROLLER_BASE_VLOG(Actor, Verbosity, Format, ...) \
 { \

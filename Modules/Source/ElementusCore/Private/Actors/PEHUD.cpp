@@ -4,6 +4,7 @@
 
 #include "Actors/PEHUD.h"
 #include "Management/PECoreSettings.h"
+#include "LogElementusCore.h"
 #include <Blueprint/UserWidget.h>
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEHUD)
@@ -26,7 +27,7 @@ void APEHUD::BeginPlay()
 
 		if (!IsValid(UMGHUDClass))
 		{
-			UE_LOG(LogTemp, Error, TEXT("%s - Missing setting: HUD Class"), *FString(__func__));
+			UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Missing setting: HUD Class"), *FString(__func__));
 			return;
 		}
 
@@ -37,7 +38,7 @@ void APEHUD::BeginPlay()
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("%s - Failed to initialize UMG HUD"), *FString(__func__));
+			UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Failed to initialize UMG HUD"), *FString(__func__));
 		}
 	}
 }

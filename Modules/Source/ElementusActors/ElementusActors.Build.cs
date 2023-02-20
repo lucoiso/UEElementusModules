@@ -25,7 +25,8 @@ public class ElementusActors : ModuleRules
 			"Niagara",
 			"ElementusCommon",
 			"ElementusAbilitySystem",
-			"GameplayAbilities"
+			"GameplayAbilities",
+			"DeveloperSettings"
 		});
 
 		SetupIrisSupport(Target);

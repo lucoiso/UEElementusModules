@@ -62,6 +62,6 @@ void UPESpawnProjectile_Task::Activate()
 		OnSpawnFailed.Broadcast(nullptr);
 	}	
 
-	UE_LOG(LogGameplayTasks, Display, TEXT("%s - Task %s ended"), *FString(__func__), *GetName());
+	UE_LOG(LogElementusAbilitySystem_Internal, Display, TEXT("%s - Task %s ended"), *FString(__func__), *GetName());
 	EndTask();
 }

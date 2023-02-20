@@ -51,7 +51,7 @@ UPEGameplayAbility::UPEGameplayAbility(const FObjectInitializer& ObjectInitializ
 
 void UPEGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
-	ABILITY_VLOG(this, Display, TEXT("Ability %s given to %s."), *GetName(), *ActorInfo->AvatarActor->GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ability %s given to %s."), *GetName(), *ActorInfo->AvatarActor->GetName());
 
 	Super::OnGiveAbility(ActorInfo, Spec);
 
@@ -77,7 +77,7 @@ void UPEGameplayAbility::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorI
 
 void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
 {
-	ABILITY_VLOG(this, Display, TEXT("Trying to pre-activate ability %s."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Trying to pre-activate ability %s."), *GetName());
 
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
 
@@ -162,7 +162,7 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
 
 void UPEGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	ABILITY_VLOG(this, Display, TEXT("%s ability successfully activated."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ability %s activated."), *GetName());
 
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
@@ -179,7 +179,7 @@ void UPEGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 		ActorInfo = GetCurrentActorInfo();
 	}
 
-	ABILITY_VLOG(this, Display, TEXT("Ending %s ability."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ending %s ability."), *GetName());
 
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
@@ -383,7 +383,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
 
 	if (GameplayCueTag.IsValid())
 	{
-		ABILITY_VLOG(this, Display, TEXT("Activating %s ability associated Gameplay Cues with Tag %s."), *GetName(), *GameplayCueTag.ToString());
+		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Activating %s ability associated Gameplay Cues with Tag %s."), *GetName(), *GameplayCueTag.ToString());
 
 		Parameters.AbilityLevel = GetAbilityLevel();
 		Parameters.Instigator = SourceAbilitySystem->GetAvatarActor();
@@ -397,7 +397,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
 	}
 	else
 	{
-		ABILITY_VLOG(this, Warning, TEXT("Ability %s failed to activate Gameplay Cue."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Warning, TEXT("Ability %s failed to activate Gameplay Cue."), *GetName());
 	}
 }
 
@@ -410,7 +410,7 @@ void UPEGameplayAbility::BP_ApplyAbilityEffectsToSelf()
 
 void UPEGameplayAbility::ApplyAbilityEffectsToSelf(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-	ABILITY_VLOG(this, Display, TEXT("Applying %s ability effects to owner."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to owner."), *GetName());
 
 	for (const FGameplayEffectGroupedData& EffectGroup : SelfAbilityEffects)
 	{		
@@ -432,7 +432,7 @@ void UPEGameplayAbility::BP_RemoveAbilityEffectsFromSelf()
 
 void UPEGameplayAbility::RemoveAbilityEffectsFromSelf(const FGameplayAbilityActorInfo* ActorInfo)
 {
-	ABILITY_VLOG(this, Display, TEXT("Removing %s ability effects from owner."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability effects from owner."), *GetName());
 
 	for (const FGameplayEffectGroupedData& EffectGroup : SelfAbilityEffects)
 	{
@@ -452,7 +452,7 @@ void UPEGameplayAbility::BP_ApplyAbilityEffectsToTarget(const FGameplayAbilityTa
 
 void UPEGameplayAbility::ApplyAbilityEffectsToTarget(const FGameplayAbilityTargetDataHandle TargetDataHandle, const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-	ABILITY_VLOG(this, Display, TEXT("Applying %s ability effects to targets."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to targets."), *GetName());
 
 	for (const FGameplayEffectGroupedData& EffectGroup : TargetAbilityEffects)
 	{
@@ -486,7 +486,7 @@ void UPEGameplayAbility::RemoveCooldownEffect(UAbilitySystemComponent* SourceAbi
 {
 	if (IsValid(GetCooldownGameplayEffect()))
 	{
-		ABILITY_VLOG(this, Display, TEXT("Removing %s ability cooldown."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability cooldown."), *GetName());
 		SourceAbilitySystem->RemoveActiveGameplayEffectBySourceEffect(CooldownGameplayEffectClass, SourceAbilitySystem);
 	}
 }
@@ -495,13 +495,13 @@ void UPEGameplayAbility::PlayAbilitySoundAttached(USceneComponent* InComponent, 
 {
 	if (!IsValid(AbilitySoundData.AbilitySoundFX))
 	{
-		ABILITY_VLOG(this, Error, TEXT("Tried to play ability %s sound with a null sound object."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Tried to play ability %s sound with a null sound object."), *GetName());
 		return;
 	}
 
 	if (!IsValid(InComponent))
 	{
-		ABILITY_VLOG(this, Error, TEXT("Tried to play ability %s sound with a null scene component target."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Tried to play ability %s sound with a null scene component target."), *GetName());
 		return;
 	}
 
@@ -512,7 +512,7 @@ void UPEGameplayAbility::PlayAbilitySoundAtLocation(const UObject* WorldContext,
 {
 	if (!IsValid(AbilitySoundData.AbilitySoundFX))
 	{
-		ABILITY_VLOG(this, Error, TEXT("Tried to play ability %s sound with a null sound object."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Tried to play ability %s sound with a null sound object."), *GetName());
 		return;
 	}
 	

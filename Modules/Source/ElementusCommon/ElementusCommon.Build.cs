@@ -20,6 +20,7 @@ public class ElementusCommon : ModuleRules
 		{
 			"Engine",
 			"CoreUObject",
+			"DeveloperSettings"
 		});
 
 		SetupIrisSupport(Target);

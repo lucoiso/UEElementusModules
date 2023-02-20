@@ -285,7 +285,7 @@ void APEPlayerController::Client_OpenInventory_Implementation()
 	
 	if (!IsValid(InventoryUIClass))
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s - Missing setting: Main Inventory Widget"), *FString(__func__));
+		UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Missing setting: Main Inventory Widget"), *FString(__func__));
 		return;
 	}
 

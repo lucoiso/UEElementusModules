@@ -11,6 +11,7 @@
 #include "ViewModels/Attributes/PEVM_AttributeBasic.h"
 #include "ViewModels/Attributes/PEVM_AttributeCustom.h"
 #include "ViewModels/Attributes/PEVM_AttributeLeveling.h"
+#include "LogElementusAbilitySystem.h"
 #include "PEAbilityTags.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEAbilitySystemComponent)
@@ -146,7 +147,7 @@ void UPEAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActo
 
 void UPEAbilitySystemComponent::InitializeAttributeViewModel(const UAttributeSet* AttributeSet)
 {
-	UE_LOG(LogTemp, Display, TEXT("%s - Initializing view model for attribute %s"), *FString(__func__), *AttributeSet->GetName());
+	UE_LOG(LogElementusAbilitySystem_Internal, Display, TEXT("%s - Initializing view model for attribute %s"), *FString(__func__), *AttributeSet->GetName());
 
 	if (AttributeSet->GetClass()->IsChildOf<UPEBasicStatusAS>())
 	{
