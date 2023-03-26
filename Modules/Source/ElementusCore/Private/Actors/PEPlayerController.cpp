@@ -32,6 +32,12 @@ APEPlayerController::APEPlayerController(const FObjectInitializer& ObjectInitial
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
+	bOnlyRelevantToOwner = true;
+	bAlwaysRelevant = false;
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 3.f;
+
 	if (const UMFEA_Settings* MF_Settings = GetDefault<UMFEA_Settings>(); !MF_Settings->InputIDEnumeration.IsNull())
 	{
 		InputEnumHandle = MF_Settings->InputIDEnumeration.LoadSynchronous();

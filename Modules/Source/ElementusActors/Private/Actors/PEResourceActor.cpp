@@ -12,5 +12,11 @@ APEResourceActor::APEResourceActor(const FObjectInitializer& ObjectInitializer) 
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
+	bOnlyRelevantToOwner = false;
+	bAlwaysRelevant = false;
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 1.f;
+
 	// Not implemented yet
 }

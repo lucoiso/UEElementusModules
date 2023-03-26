@@ -15,6 +15,12 @@ APEInventoryPackage::APEInventoryPackage(const FObjectInitializer& ObjectInitial
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
+	bOnlyRelevantToOwner = false;
+	bAlwaysRelevant = false;
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 1.f;
+
 	PackageMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PackageMesh"));
 	PackageMesh->SetupAttachment(RootComponent);
 	PackageMesh->SetRelativeLocation(FVector(0.f, 0.f, 50.f));

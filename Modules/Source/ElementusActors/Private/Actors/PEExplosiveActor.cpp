@@ -17,6 +17,12 @@ APEExplosiveActor::APEExplosiveActor(const FObjectInitializer& ObjectInitializer
 	bReplicates = false;
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
+
+	bOnlyRelevantToOwner = false;
+	bAlwaysRelevant = false;
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 1.f;
 }
 
 void APEExplosiveActor::PerformExplosion()

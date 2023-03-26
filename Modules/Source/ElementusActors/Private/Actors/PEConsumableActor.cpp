@@ -18,6 +18,12 @@ APEConsumableActor::APEConsumableActor(const FObjectInitializer& ObjectInitializ
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
+	bOnlyRelevantToOwner = false;
+	bAlwaysRelevant = false;
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 1.f;
+
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
 	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Object Mesh"));

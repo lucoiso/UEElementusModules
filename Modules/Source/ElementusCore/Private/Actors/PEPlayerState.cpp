@@ -23,7 +23,11 @@ APEPlayerState::APEPlayerState(const FObjectInitializer& ObjectInitializer) : Su
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
-	NetUpdateFrequency = 100.f;
+	bOnlyRelevantToOwner = false;
+	bAlwaysRelevant = true;
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 1.f;
+	NetPriority = 1.f;
 }
 
 void APEPlayerState::BeginPlay()

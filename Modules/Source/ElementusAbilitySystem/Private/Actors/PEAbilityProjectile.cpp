@@ -15,8 +15,12 @@
 APEAbilityProjectile::APEAbilityProjectile(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	bReplicates = true;
+
+	bOnlyRelevantToOwner = false;
 	bAlwaysRelevant = true;
-	AActor::SetReplicateMovement(true);
+	AActor::SetReplicateMovement(false);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 1.f;
 
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;

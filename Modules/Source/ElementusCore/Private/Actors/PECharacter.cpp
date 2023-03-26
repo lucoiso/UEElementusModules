@@ -31,8 +31,11 @@ APECharacter::APECharacter(const FObjectInitializer& ObjectInitializer) : Super(
 
 	AIControllerClass = APEAIController::StaticClass();
 
-	bAlwaysRelevant = true;
-	NetCullDistanceSquared = 900000000.0f;
+	bOnlyRelevantToOwner = false;
+	bAlwaysRelevant = false;
+	AActor::SetReplicateMovement(true);
+	NetUpdateFrequency = 100.f;
+	NetPriority = 3.f;
 
 	GetCapsuleComponent()->InitCapsuleSize(35.f, 90.0f);
 
