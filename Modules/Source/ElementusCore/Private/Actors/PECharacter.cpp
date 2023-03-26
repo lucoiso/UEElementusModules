@@ -224,13 +224,15 @@ void APECharacter::PerformDeath()
 	bAlwaysRelevant = false;
 
 	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindLambda([this]
-	{
-		if (IsValid(this))
+	TimerDelegate.BindLambda(
+		[this]
 		{
-			Server_DestroyCharacter();
+			if (IsValid(this))
+			{
+				Server_DestroyCharacter();
+			}
 		}
-	});
+	);
 
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 15.0f, false);

@@ -148,13 +148,15 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
 	if (bEndAbilityAfterActiveTime)
 	{
 		FTimerDelegate TimerDelegate;
-		TimerDelegate.BindLambda([=]() -> void
-		{
-			if (IsValid(this) && IsActive())
+		TimerDelegate.BindLambda(
+			[=]() -> void
 			{
-				EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+				if (IsValid(this) && IsActive())
+				{
+					EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+				}
 			}
-		});
+		);
 
 		GetWorld()->GetTimerManager().SetTimer(CancelationTimerHandle, TimerDelegate, AbilityActiveTime, false);
 	}

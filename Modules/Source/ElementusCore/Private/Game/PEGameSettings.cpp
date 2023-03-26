@@ -3,6 +3,8 @@
 // Repo: https://github.com/lucoiso/UEProject_Elementus
 
 #include "Game/PEGameSettings.h"
+#include "LogElementusCore.h"
+#include <Interfaces/IPluginManager.h>
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEGameSettings)
 
@@ -15,62 +17,33 @@ void UPEGameSettings::ApplyPECustomSettings()
 {
 	if (IConsoleVariable* const AntiAliasingCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod")))
 	{
-		AntiAliasingCVar->Set(AntiAliasingMode, ECVF_SetByConsole);
+		AntiAliasingCVar->Set(AntiAliasingMode);
 	}
-
-	if (IConsoleVariable* const FSREnabledCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.FidelityFX.FSR.Enabled")))
+		
+	if (IConsoleVariable* const TemporalUpsamplingCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.TemporalAA.Upsampling")); TemporalUpsamplingCVar && AntiAliasingMode == 2)
 	{
-		FSREnabledCVar->Set(bFSREnabled, ECVF_SetByConsole);
-	}
-
-	if (IConsoleVariable* const ScreenPercentageCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.ScreenPercentage"));
-		ScreenPercentageCVar && bFSREnabled)
-	{
-		switch (FSRMode)
-		{
-			case 0: // Performance
-				ScreenPercentageCVar->Set(50, ECVF_SetByConsole);
-				break;
-
-			case 1: // Balanced
-				ScreenPercentageCVar->Set(59, ECVF_SetByConsole);
-				break;
-
-			case 2: // Quality
-				ScreenPercentageCVar->Set(67, ECVF_SetByConsole);
-				break;
-
-			case 3: // Ultra Quality
-				ScreenPercentageCVar->Set(77, ECVF_SetByConsole);
-				break;
-
-			default: break;
-		}
-	}
-
-	if (IConsoleVariable* const TemporalUpsamplingCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.TemporalAA.Upsampling"));
-		TemporalUpsamplingCVar && AntiAliasingMode == 2)
-	{
-		TemporalUpsamplingCVar->Set(bEnableTemporalUpscaling, ECVF_SetByConsole);
+		TemporalUpsamplingCVar->Set(bEnableTemporalUpscaling);
 	}
 
 	if (IConsoleVariable* const DynamicGICvar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.DynamicGlobalIlluminationMethod")))
 	{
 		// 0 = None | 1 = Lumen
-		DynamicGICvar->Set(bEnableLumen, ECVF_SetByConsole);
+		DynamicGICvar->Set(bEnableLumen);
 	}
 
 	if (IConsoleVariable* const DynamicGRCvar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.ReflectionMethod")))
 	{
 		// 1 = Lumen | 2 = Screen Space
-		DynamicGRCvar->Set(bEnableLumen ? 1 : 2, ECVF_SetByConsole);
+		DynamicGRCvar->Set(bEnableLumen ? 1 : 2);
 	}
 
 	if (IConsoleVariable* const VirtualShadowCvar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.Shadow.Virtual.Enable")))
 	{
 		// Enable Virtual Shadow Map if Lumen is enabled
-		VirtualShadowCvar->Set(bEnableLumen, ECVF_SetByConsole);
+		VirtualShadowCvar->Set(bEnableLumen);
 	}
+
+	ApplyFSRSettings();
 }
 
 void UPEGameSettings::ApplyNonResolutionSettings()
@@ -82,28 +55,35 @@ void UPEGameSettings::ApplyNonResolutionSettings()
 void UPEGameSettings::SetToDefaults()
 {
 	AntiAliasingMode = 1;
-	bFSREnabled = true;
-	FSRMode = 3;
 	bEnableTemporalUpscaling = true;
 	bEnableLumen = false;
+
+	FSRMode = 2;
+	bFSREnabled = IsFSREnabled();
 
 	Super::SetToDefaults();
 
 	ApplyPECustomSettings();
 }
 
-void UPEGameSettings::SetAntiAliasingMode(const int InMode)
+void UPEGameSettings::SetAntiAliasingMode(const int32 InMode)
 {
 	AntiAliasingMode = InMode;
 }
 
-int UPEGameSettings::GetAntiAliasingMode() const
+int32 UPEGameSettings::GetAntiAliasingMode() const
 {
 	return AntiAliasingMode;
 }
 
 void UPEGameSettings::SetFSREnabled(const bool bEnable)
 {
+	if (!IsFSREnabled())
+	{
+		UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - FSR 1.0 plugin not found."), *FString(__func__));
+		return;
+	}
+
 	bFSREnabled = bEnable;
 }
 
@@ -112,12 +92,18 @@ bool UPEGameSettings::GetFSREnabled() const
 	return bFSREnabled;
 }
 
-void UPEGameSettings::SetFSRMode(const int InMode)
+void UPEGameSettings::SetFSRMode(const int32 InMode)
 {
+	if (!IsFSREnabled())
+	{
+		UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - FSR 1.0 plugin not found."), *FString(__func__));
+		return;
+	}
+
 	FSRMode = InMode;
 }
 
-int UPEGameSettings::GetFSRMode() const
+int32 UPEGameSettings::GetFSRMode() const
 {
 	return FSRMode;
 }
@@ -140,6 +126,50 @@ void UPEGameSettings::SetLumenEnabled(const bool bEnable)
 bool UPEGameSettings::GetLumenEnabled() const
 {
 	return bEnableLumen;
+}
+
+bool UPEGameSettings::IsFSREnabled() const
+{
+	const TSharedPtr<IPlugin> FSRPlugin = IPluginManager::Get().FindPlugin("FSR");
+	return FSRPlugin.IsValid() && FSRPlugin->IsEnabled();
+}
+
+void UPEGameSettings::ApplyFSRSettings() const
+{
+	if (!IsFSREnabled())
+	{
+		return;
+	}
+
+	if (IConsoleVariable* const FSREnabledCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.FidelityFX.FSR.Enabled")))
+	{
+		FSREnabledCVar->Set(bFSREnabled);
+	}
+
+	if (IConsoleVariable* const ScreenPercentageCVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.ScreenPercentage")); ScreenPercentageCVar && bFSREnabled)
+	{
+		switch (FSRMode)
+		{
+			case 0: // Performance
+				ScreenPercentageCVar->Set(50);
+				break;
+
+			case 1: // Balanced
+				ScreenPercentageCVar->Set(59);
+				break;
+
+			case 2: // Quality
+				ScreenPercentageCVar->Set(67);
+				break;
+
+			case 3: // Ultra Quality
+				ScreenPercentageCVar->Set(77);
+				break;
+
+			default: 
+				break;
+		}
+	}
 }
 
 UPEGameSettings* UPEGameSettings::GetCustomGameUserSettings()

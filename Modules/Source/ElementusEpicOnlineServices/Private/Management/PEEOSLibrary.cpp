@@ -152,10 +152,12 @@ void UPEEOSLibrary::IngestEOSStats(const int32 LocalUserNum, const TMap<FName, i
 			UpdatedStats.Stats.Add(StatName.ToString(), StatUpdate);
 		}
 
-		const FOnlineStatsUpdateStatsComplete UpdateStatsDelegate = FOnlineStatsUpdateStatsComplete::CreateLambda([UserNetIdRef, FuncName = __func__](const FOnlineError& ResultState)
-		{
-			UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - User ID: %s; Result: %s"), *FString(__func__ ), *UserNetIdRef->ToString(), *ResultState.ToLogString());
-		});
+		const FOnlineStatsUpdateStatsComplete UpdateStatsDelegate = FOnlineStatsUpdateStatsComplete::CreateLambda(
+			[UserNetIdRef, FuncName = __func__](const FOnlineError& ResultState)
+			{
+				UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - User ID: %s; Result: %s"), *FString(__func__ ), *UserNetIdRef->ToString(), *ResultState.ToLogString());
+			}
+		);
 
 		StatsInterface->UpdateStats(UserNetIdRef, { UpdatedStats }, UpdateStatsDelegate);
 	}

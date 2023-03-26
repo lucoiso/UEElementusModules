@@ -32,10 +32,10 @@ public:
 	static UPEGameSettings* GetCustomGameUserSettings();
 
 	UFUNCTION(BlueprintCallable, Category = Settings)
-	void SetAntiAliasingMode(const int InMode);
+	void SetAntiAliasingMode(const int32 InMode);
 
 	UFUNCTION(BlueprintPure, Category = Settings)
-	int GetAntiAliasingMode() const;
+	int32 GetAntiAliasingMode() const;
 
 	UFUNCTION(BlueprintCallable, Category = Settings, meta = (DisplayName = "Set FSR Enabled"))
 	void SetFSREnabled(const bool bEnable);
@@ -44,10 +44,10 @@ public:
 	bool GetFSREnabled() const;
 
 	UFUNCTION(BlueprintCallable, Category = Settings, meta = (DisplayName = "Set FSR Mode"))
-	void SetFSRMode(const int InMode);
+	void SetFSRMode(const int32 InMode);
 
 	UFUNCTION(BlueprintPure, Category = Settings, meta = (DisplayName = "Get FSR Mode"))
-	int GetFSRMode() const;
+	int32 GetFSRMode() const;
 
 	UFUNCTION(BlueprintCallable, Category = Settings)
 	void SetTemporalUpscalingEnabled(const bool bEnable);
@@ -63,17 +63,20 @@ public:
 
 private:
 	UPROPERTY(config, meta = (Setter = "SetAntiAliasingMode", Getter = "GetAntiAliasingMode"))
-	int AntiAliasingMode;
+	int32 AntiAliasingMode;
 
 	UPROPERTY(config, meta = (Setter = "SetFSREnabled", Getter = "GetFSREnabled"))
 	bool bFSREnabled;
 
 	UPROPERTY(config, meta = (Setter = "SetFSRMode", Getter = "GetFSRMode"))
-	int FSRMode;
+	int32 FSRMode;
 
 	UPROPERTY(config, meta = (Setter = "SetTemporalUpscalingEnabled", Getter = "GetTemporalUpscalingEnabled"))
 	bool bEnableTemporalUpscaling;
 
 	UPROPERTY(config, meta = (Setter = "SetLumenEnabled", Getter = "GetLumenEnabled"))
 	bool bEnableLumen;
+
+	bool IsFSREnabled() const;
+	void ApplyFSRSettings() const;
 };

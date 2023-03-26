@@ -79,25 +79,27 @@ void UPEAbilitySystemComponent::RemoveEffectGroupedDataFromSelf(const FGameplayE
 	}
 	
 	FGameplayEffectQuery Query;
-	Query.CustomMatchDelegate.BindLambda([&](const FActiveGameplayEffect& CurEffect)
-	{
-		bool bMatches = false;
-
-		if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
+	Query.CustomMatchDelegate.BindLambda(
+		[&](const FActiveGameplayEffect& CurEffect)
 		{
-			for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
-			{
-				bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
+			bool bMatches = false;
 
-				if (!bMatches)
+			if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
+			{
+				for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
 				{
-					break;
+					bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
+
+					if (!bMatches)
+					{
+						break;
+					}
 				}
 			}
-		}
 
-		return bMatches;
-	});
+			return bMatches;
+		}
+	);
 
 	bIsNetDirty = true;
 	RemoveActiveEffects(Query, StacksToRemove);
@@ -116,25 +118,27 @@ void UPEAbilitySystemComponent::RemoveEffectGroupedDataFromTarget(const FGamepla
 	}
 
 	FGameplayEffectQuery Query;
-	Query.CustomMatchDelegate.BindLambda([&](const FActiveGameplayEffect& CurEffect)
-	{
-		bool bMatches = false;
-
-		if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
+	Query.CustomMatchDelegate.BindLambda(
+		[&](const FActiveGameplayEffect& CurEffect)
 		{
-			for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
-			{
-				bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
+			bool bMatches = false;
 
-				if (!bMatches)
+			if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
+			{
+				for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
 				{
-					break;
+					bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
+
+					if (!bMatches)
+					{
+						break;
+					}
 				}
 			}
-		}
 
-		return bMatches;
-	});
+			return bMatches;
+		}
+	);
 
 	bIsNetDirty = true;
 	TargetABSC->RemoveActiveEffects(Query, StacksToRemove);

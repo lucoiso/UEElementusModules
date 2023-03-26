@@ -37,7 +37,8 @@ public class ElementusCore : ModuleRules
             "MoviePlayer",
             "ElementusAbilitySystem",
             "ElementusInventorySystem",
-            "ElementusCommon"
+            "ElementusCommon",
+            "Projects"
         });
 
         SetupIrisSupport(Target);

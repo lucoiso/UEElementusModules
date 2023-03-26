@@ -51,13 +51,15 @@ void APEPlayerController::InitializeRespawn(const float InSeconds)
 		if (InSeconds > 0.f)
 		{
 			FTimerDelegate TimerDelegate;
-			TimerDelegate.BindLambda([&]
-			{
-				if (IsValid(this))
+			TimerDelegate.BindLambda(
+				[&]
 				{
-					RespawnAndPossess();
+					if (IsValid(this))
+					{
+						RespawnAndPossess();
+					}
 				}
-			});
+			);
 
 			FTimerHandle Handle;
 			GetWorld()->GetTimerManager().SetTimer(Handle, TimerDelegate, InSeconds, false);
