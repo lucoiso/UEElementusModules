@@ -210,6 +210,7 @@ if (GetGameplayAttributeValueChangeDelegate(##AttributeClass##::Get##AttributeNa
 GetGameplayAttributeValueChangeDelegate(##AttributeClass##::Get##AttributeName##Attribute()).AddUObject(this, &UPEAbilitySystemComponent::OnViewModelAttributeChange); \
 /* This block is used to initialize the first value of the attribute because the viewmodel is only updating when the attribute changes after the binding occurs */ \
 { \
+	UninitializedViewModelAttributes.Add(#AttributeName); \
 	OnViewModelAttributeChange_Client(##AttributeClass##::Get##AttributeName##Attribute(), Attribute->Get##AttributeName##()); \
 }
 
@@ -243,10 +244,31 @@ void UPEAbilitySystemComponent::InitializeLevelingAttributesViewModel(const UPEL
 
 void UPEAbilitySystemComponent::OnViewModelAttributeChange(const FOnAttributeChangeData& AttributeChangeData)
 {
+	if (UninitializedViewModelAttributes.Contains(*AttributeChangeData.Attribute.GetName()))
+	{
+		InitializeViewModelAttributeData_Client(AttributeChangeData.Attribute, AttributeChangeData.NewValue);
+
+		UninitializedViewModelAttributes.Remove(*AttributeChangeData.Attribute.GetName());
+	} 
+	else if (AttributeChangeData.OldValue == AttributeChangeData.NewValue)
+	{
+		return;
+	}
+
 	OnViewModelAttributeChange_Client(AttributeChangeData.Attribute, AttributeChangeData.NewValue);
 }
 
+void UPEAbilitySystemComponent::InitializeViewModelAttributeData_Client_Implementation(const FGameplayAttribute& Attribute, const float& NewValue)
+{
+	NotifyAttributeChange(Attribute, NewValue);
+}
+
 void UPEAbilitySystemComponent::OnViewModelAttributeChange_Client_Implementation(const FGameplayAttribute& Attribute, const float& NewValue)
+{
+	NotifyAttributeChange(Attribute, NewValue);
+}
+
+void UPEAbilitySystemComponent::NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue)
 {
 	if (Attribute.GetAttributeSetClass()->IsChildOf<UPEBasicStatusAS>())
 	{

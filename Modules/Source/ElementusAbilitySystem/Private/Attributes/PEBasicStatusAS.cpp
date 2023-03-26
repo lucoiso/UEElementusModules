@@ -24,18 +24,17 @@ void UPEBasicStatusAS::PreAttributeChange(const FGameplayAttribute& Attribute, f
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 
-	// Check which attribute is being modified and clamp it with AdjustAttributeForMaxChange function
-	if (Attribute == GetMaxHealthAttribute())
+	if (Attribute == GetHealthAttribute())
 	{
-		AdjustAttributeForMaxChange(Health, MaxHealth, NewValue, GetHealthAttribute());
+		NewValue = FMath::Clamp(NewValue, 0.f, MaxHealth.GetCurrentValue());
 	}
-	else if (Attribute == GetMaxManaAttribute())
+	else if (Attribute == GetManaAttribute())
 	{
-		AdjustAttributeForMaxChange(Mana, MaxMana, NewValue, GetManaAttribute());
+		NewValue = FMath::Clamp(NewValue, 0.f, MaxMana.GetCurrentValue());
 	}
-	else if (Attribute == GetMaxStaminaAttribute())
+	else if (Attribute == GetStaminaAttribute())
 	{
-		AdjustAttributeForMaxChange(Stamina, MaxStamina, NewValue, GetStaminaAttribute());
+		NewValue = FMath::Clamp(NewValue, 0.f, MaxStamina.GetCurrentValue());
 	}
 }
 

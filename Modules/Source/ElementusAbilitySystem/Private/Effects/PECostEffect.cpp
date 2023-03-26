@@ -18,7 +18,7 @@ UPECostEffect::UPECostEffect(const FObjectInitializer& ObjectInitializer) : Supe
 	/** From GameplayEffect.h: Duration in seconds. 0.0 for instantaneous effects; -1.0 for infinite duration. */
 	DurationMagnitude = FGameplayEffectModifierMagnitude(SetByCallerDuration);
 
-	Period = 0.333f;
+	Period = 1.f;
 	
 	FSetByCallerFloat SetByCallerHealth;
 	SetByCallerHealth.DataTag = FGameplayTag::RequestGameplayTag(GlobalTag_SetByCallerHealth);

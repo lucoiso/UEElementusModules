@@ -300,23 +300,23 @@ void APECharacter::Landed(const FHitResult& Hit)
 
 void APECharacter::AbilityFailed_Implementation(const UGameplayAbility* Ability, const FGameplayTagContainer& TagContainer)
 {
-	ABILITY_VLOG(Ability, Warning, TEXT("Ability %s failed to activate. Owner: %s"), *Ability->GetName(), *GetName());
-
-	if (!TagContainer.IsEmpty())
-	{
-		ABILITY_VLOG(Ability, Warning, TEXT("Reasons:"));
-		for (const FGameplayTag& TagIterator : TagContainer)
-		{
-			if (TagIterator.IsValid())
-			{
-				ABILITY_VLOG(Ability, Warning, TEXT("Tag: %s"), *TagIterator.ToString());
-			}
-		}
-	}
-
 #if WITH_EDITOR
 	if (bDebugAbilities)
 	{
+		ABILITY_VLOG(Ability, Warning, TEXT("Ability %s failed to activate. Owner: %s"), *Ability->GetName(), *GetName());
+
+		if (!TagContainer.IsEmpty())
+		{
+			ABILITY_VLOG(Ability, Warning, TEXT("Reasons:"));
+			for (const FGameplayTag& TagIterator : TagContainer)
+			{
+				if (TagIterator.IsValid())
+				{
+					ABILITY_VLOG(Ability, Warning, TEXT("Tag: %s"), *TagIterator.ToString());
+				}
+			}
+		}
+
 		ABILITY_VLOG(Ability, Warning, TEXT("================ START OF ABILITY SYSTEM COMPONENT DEBUG INFO ================"));
 
 		AbilitySystemComponent->PrintDebug();

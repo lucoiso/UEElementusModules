@@ -33,6 +33,7 @@ UPEGameplayAbility::UPEGameplayAbility(const FObjectInitializer& ObjectInitializ
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(GlobalTag_DeadState));
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(GlobalTag_StunState));
 
+	ReplicationPolicy = EGameplayAbilityReplicationPolicy::ReplicateNo;
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
 	bIsCancelable = true;

@@ -17,6 +17,7 @@
 #include <GameFramework/GameModeBase.h>
 #include <GameFramework/PlayerState.h>
 #include <Blueprint/UserWidget.h>
+#include <Net/UnrealNetwork.h>
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEPlayerController)
 
@@ -71,6 +72,48 @@ void APEPlayerController::InitializeRespawn(const float InSeconds)
 	}
 }
 
+void APEPlayerController::PerformAbilityInputQueueAdditions_Implementation()
+{
+	for (const FPendingAbilityInputData& Iterator : AbilityInputAddQueue)
+	{
+		ProcessAbilityInputAddition(Iterator.Action, Iterator.InputID);
+	}
+
+	AbilityInputAddQueue.Empty();
+
+	MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputAddQueue, this);
+}
+
+void APEPlayerController::PerformAbilityInputQueueRemovals_Implementation()
+{
+	for (const TObjectPtr<const UInputAction>& Iterator : AbilityInputRemoveQueue)
+	{
+		ProcessAbilityInputRemoval(Iterator);
+	}
+
+	AbilityInputRemoveQueue.Empty();
+
+	MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
+}
+
+void APEPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	PerformAbilityInputQueueRemovals();
+	PerformAbilityInputQueueAdditions();
+}
+
+void APEPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	FDoRepLifetimeParams SharedParams;
+	SharedParams.bIsPushBased = true;
+
+	DOREPLIFETIME_WITH_PARAMS_FAST(APEPlayerController, AbilityInputAddQueue, SharedParams);
+}
+
 void APEPlayerController::RespawnAndPossess_Implementation()
 {
 	if (const AActor* const PlayerStart = GetWorld()->GetAuthGameMode()->FindPlayerStart(this))
@@ -96,8 +139,7 @@ void APEPlayerController::RespawnAndPossess_Implementation()
 }
 
 #pragma region IMFEA_AbilityInputBinding
-// Double "_Implementation" because this function is a RPC call version of a virtual function from IAbilityBinding interface
-void APEPlayerController::SetupAbilityBindingByInput_Implementation_Implementation(UInputAction* Action, const int32 InputID)
+void APEPlayerController::SetupAbilityBindingByInput_Implementation(UInputAction* Action, const int32 InputID)
 {
 	if (!IsValid(Action))
 	{
@@ -105,10 +147,22 @@ void APEPlayerController::SetupAbilityBindingByInput_Implementation_Implementati
 		return;
 	}
 
+	if (IsValid(InputComponent))
+	{
+		ProcessAbilityInputAddition(Action, InputID);
+	}
+	else
+	{
+		AbilityInputAddQueue.Add(FPendingAbilityInputData(Action, InputID));
+		MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputAddQueue, this);
+	}
+}
+
+void APEPlayerController::ProcessAbilityInputAddition_Implementation(UInputAction* Action, const int32 InputID)
+{
 	CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Setting up ability input binding for %s with action %s and id %u"), *FString(__func__), *GetName(), *Action->GetName(), InputID);
 
-	if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
-		ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
+	if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent); ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
 	{
 		const FAbilityInputData AbilityBinding
 		{
@@ -121,13 +175,24 @@ void APEPlayerController::SetupAbilityBindingByInput_Implementation_Implementati
 	}
 }
 
-// Double "_Implementation" because this function is a RPC call version of a virtual function from IAbilityBinding interface
-void APEPlayerController::RemoveAbilityInputBinding_Implementation_Implementation(const UInputAction* Action)
+void APEPlayerController::RemoveAbilityInputBinding_Implementation(const UInputAction* Action)
+{
+	if (IsValid(InputComponent))
+	{
+		ProcessAbilityInputRemoval(Action);
+	}
+	else
+	{
+		AbilityInputRemoveQueue.Add(Action);
+		MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
+	}
+}
+
+void APEPlayerController::ProcessAbilityInputRemoval_Implementation(const UInputAction* Action)
 {
 	CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Removing ability input binding for %s with action %s"), *FString(__func__), *GetName(), IsValid(Action) ? *Action->GetName() : *FString("NULL"));
-	
-	if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
-		ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
+
+	if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent); ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
 	{
 		EnhancedInputComponent->RemoveBindingByHandle(AbilityActionBindings.FindRef(Action).OnPressedHandle);
 		EnhancedInputComponent->RemoveBindingByHandle(AbilityActionBindings.FindRef(Action).OnReleasedHandle);

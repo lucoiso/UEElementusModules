@@ -46,6 +46,7 @@ public:
 	TObjectPtr<UPEVM_AttributeBase> LevelingAttributes_VM;
 	
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
+
 	virtual void InitializeAttributeViewModel(const UAttributeSet* AttributeClass);
 
 	virtual void ResetAbilitySystemComponent();
@@ -54,7 +55,14 @@ protected:
 	virtual void OnViewModelAttributeChange(const FOnAttributeChangeData& AttributeChangeData);
 
 	UFUNCTION(Client, Reliable)
+	void InitializeViewModelAttributeData_Client(const FGameplayAttribute& Attribute, const float& NewValue);
+
+	UFUNCTION(Client, Unreliable)
 	void OnViewModelAttributeChange_Client(const FGameplayAttribute& Attribute, const float& NewValue);
+
+	void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue);
+
+	TArray<FName> UninitializedViewModelAttributes;
 
 private:
 	void InitializeBasicAttributesViewModel(const class UPEBasicStatusAS* Attribute);

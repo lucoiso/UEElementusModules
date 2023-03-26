@@ -33,6 +33,21 @@ class UElementusInventoryComponent;
 class UGameplayEffect;
 struct FPrimaryElementusItemId;
 
+USTRUCT()
+struct FPendingAbilityInputData
+{
+	GENERATED_BODY()
+
+	FPendingAbilityInputData() = default;
+	FPendingAbilityInputData(UInputAction* InAction, const int32 InInputID) : Action(InAction), InputID(InInputID) {}
+
+	UPROPERTY()
+	TObjectPtr<UInputAction> Action;
+
+	UPROPERTY()
+	int32 InputID = 0;
+};
+
 /**
  *
  */
@@ -47,13 +62,17 @@ public:
 #pragma region IMFEA_AbilityInputBinding
 	/* This function came from IMFEA_AbilityInputBinding interface,
 	 * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
-	UFUNCTION(Client, Reliable)
 	virtual void SetupAbilityBindingByInput_Implementation(UInputAction* Action, const int32 InputID) override;
+
+	UFUNCTION(Client, Reliable)
+	virtual void ProcessAbilityInputAddition(UInputAction* Action, const int32 InputID);
 
 	/* This function came from IMFEA_AbilityInputBinding interface,
 	 * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
-	UFUNCTION(Client, Reliable)
 	virtual void RemoveAbilityInputBinding_Implementation(const UInputAction* Action) override;
+		
+	UFUNCTION(Client, Reliable)
+	virtual void ProcessAbilityInputRemoval(const UInputAction* Action);
 #pragma endregion IMFEA_AbilityInputBinding
 
 	/* Setup the spectating state on both client and server */
@@ -63,8 +82,18 @@ public:
 	/* Will respawn the character if the player is in spectating state */
 	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
 	void InitializeRespawn(const float InSeconds);
+	
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Project Elementus | Functions")
+	void PerformAbilityInputQueueAdditions();
+	
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Project Elementus | Functions")
+	void PerformAbilityInputQueueRemovals();
 
 protected:
+	virtual void SetupInputComponent() override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	/* Perform the respawn task on server */
 	UFUNCTION(Server, Reliable)
 	void RespawnAndPossess();
@@ -78,7 +107,13 @@ private:
 	};
 
 	TWeakObjectPtr<UEnum> InputEnumHandle;
-	TMap<UInputAction*, FAbilityInputData> AbilityActionBindings;
+	TMap<TObjectPtr<UInputAction>, FAbilityInputData> AbilityActionBindings;
+
+	UPROPERTY(Replicated)
+	TArray<FPendingAbilityInputData> AbilityInputAddQueue;
+	
+	UPROPERTY(Replicated)
+	TArray<TObjectPtr<const UInputAction>> AbilityInputRemoveQueue;
 
 	UFUNCTION(Category = "Project Elementus | Input Binding")
 	void OnAbilityInputPressed(UInputAction* SourceAction);
