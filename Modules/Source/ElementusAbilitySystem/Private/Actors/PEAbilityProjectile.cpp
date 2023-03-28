@@ -19,8 +19,11 @@ APEAbilityProjectile::APEAbilityProjectile(const FObjectInitializer& ObjectIniti
 	bOnlyRelevantToOwner = false;
 	bAlwaysRelevant = true;
 	AActor::SetReplicateMovement(false);
-	NetUpdateFrequency = 100.f;
+	NetUpdateFrequency = 75.f;
 	NetPriority = 1.f;
+	NetDormancy = ENetDormancy::DORM_Initial;
+
+	InitialLifeSpan = 3.f;
 
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
@@ -33,8 +36,6 @@ APEAbilityProjectile::APEAbilityProjectile(const FObjectInitializer& ObjectIniti
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement Component"));
 	ProjectileMovement->SetUpdatedComponent(CollisionComponent);
-
-	InitialLifeSpan = 3.f;
 
 	ProjectileMovement->InitialSpeed = 2500.f;
 	ProjectileMovement->MaxSpeed = 3000.0f;
@@ -50,8 +51,14 @@ void APEAbilityProjectile::BeginPlay()
 	CollisionComponent->OnComponentHit.AddDynamic(this, &APEAbilityProjectile::OnProjectileHit);
 }
 
-void APEAbilityProjectile::FireInDirection(const FVector Direction) const
+void APEAbilityProjectile::FireInDirection(const FVector& Direction)
 {
+	if (GetLocalRole() != ROLE_Authority)
+	{
+		return;
+	}
+
+	SetNetDormancy(ENetDormancy::DORM_Awake);
 	ProjectileMovement->Velocity = ProjectileMovement->InitialSpeed * Direction;
 }
 

@@ -5,6 +5,7 @@
 #include "Tasks/PESpawnProjectile_Task.h"
 #include "Actors/PEAbilityProjectile.h"
 #include "Core/PEAbilityData.h"
+#include "LogElementusAbilitySystem.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PESpawnProjectile_Task)
 
@@ -27,7 +28,6 @@ UPESpawnProjectile_Task* UPESpawnProjectile_Task::SpawnProjectile(UGameplayAbili
 void UPESpawnProjectile_Task::Activate()
 {
 	Super::Activate();
-
 	check(Ability);
 
 	// Only the server can spawn actors!
@@ -62,6 +62,5 @@ void UPESpawnProjectile_Task::Activate()
 		OnSpawnFailed.Broadcast(nullptr);
 	}	
 
-	UE_LOG(LogElementusAbilitySystem_Internal, Display, TEXT("%s - Task %s ended"), *FString(__func__), *GetName());
 	EndTask();
 }

@@ -58,7 +58,6 @@ class ELEMENTUSABILITYSYSTEM_API UPEVM_AttributeBase : public UMVVMViewModelBase
 public:
 	explicit UPEVM_AttributeBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-protected:
 	virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue);
 
 #if UE_WITH_IRIS

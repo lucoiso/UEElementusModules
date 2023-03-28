@@ -14,15 +14,16 @@
 
 APEConsumableActor::APEConsumableActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), bDestroyAfterConsumption(true)
 {
-	bReplicates = false;
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
+	bReplicates = true;
 	bOnlyRelevantToOwner = false;
 	bAlwaysRelevant = false;
 	AActor::SetReplicateMovement(false);
-	NetUpdateFrequency = 100.f;
+	NetUpdateFrequency = 30.f;
 	NetPriority = 1.f;
+	NetDormancy = ENetDormancy::DORM_Initial;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
@@ -54,7 +55,6 @@ void APEConsumableActor::PerformConsumption(UAbilitySystemComponent* TargetABSC)
 
 void APEConsumableActor::DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult)
 {
-	// Only call SetReplicates if has authority
 	if (GetLocalRole() != ROLE_Authority)
 	{
 		return;
@@ -62,10 +62,9 @@ void APEConsumableActor::DoInteractionBehavior_Implementation(ACharacter* Charac
 
 	if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(CharacterInteracting))
 	{
-		// Only replicates while a character is consuming
-		SetReplicates(true);
+		SetNetDormancy(ENetDormancy::DORM_Awake);
 		PerformConsumption(TargetABSC);
-		SetReplicates(false);
+		SetNetDormancy(ENetDormancy::DORM_DormantAll);
 	}
 }
 

@@ -36,6 +36,7 @@ APECharacter::APECharacter(const FObjectInitializer& ObjectInitializer) : Super(
 	AActor::SetReplicateMovement(true);
 	NetUpdateFrequency = 100.f;
 	NetPriority = 3.f;
+	NetDormancy = ENetDormancy::DORM_Awake;
 
 	GetCapsuleComponent()->InitCapsuleSize(35.f, 90.0f);
 
@@ -86,7 +87,7 @@ APECharacter::APECharacter(const FObjectInitializer& ObjectInitializer) : Super(
 	InventoryComponent->SetIsReplicated(true);
 }
 
-// Called on server when the player is possessed by a controller
+// Called on server when the character is possessed by a controller
 void APECharacter::PossessedBy(AController* InController)
 {
 	Super::PossessedBy(InController);
@@ -95,7 +96,7 @@ void APECharacter::PossessedBy(AController* InController)
 	if (InController->IsPlayerController())
 	{
 		// Initialize the ability system component that is stored by Player State
-		if (APEPlayerState* const State = GetPlayerStateChecked<APEPlayerState>())
+		if (APEPlayerState* const State = GetPlayerState<APEPlayerState>())
 		{
 			InitializeAbilitySystemComponent(State->GetAbilitySystemComponent(), State);
 		}
@@ -109,7 +110,7 @@ void APECharacter::PossessedBy(AController* InController)
 	}
 }
 
-// Called on client when the player state is initialized
+// Called on client when the player state is replicated
 void APECharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
@@ -126,7 +127,7 @@ void APECharacter::OnRep_Controller()
 {
 	Super::OnRep_Controller();
 
-	if (AbilitySystemComponent.IsValid())
+	if (IsValid(AbilitySystemComponent))
 	{
 		AbilitySystemComponent->RefreshAbilityActorInfo();
 		AbilitySystemComponent->RemoveActiveEffectsWithTags(FGameplayTagContainer(FGameplayTag::RequestGameplayTag(GlobalTag_DeadState)));
@@ -173,8 +174,6 @@ void APECharacter::InitializeAbilitySystemComponent(UAbilitySystemComponent* InA
 {
 	AbilitySystemComponent = CastChecked<UPEAbilitySystemComponent>(InABSC);
 	AbilitySystemComponent->InitAbilityActorInfo(InOwnerActor, this);
-
-	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, UGameFrameworkComponentManager::NAME_GameActorReady);
 }
 
 void APECharacter::PreInitializeComponents()
@@ -188,11 +187,7 @@ void APECharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	DefaultCrouchSpeed = GetCharacterMovement()->MaxWalkSpeedCrouched;
-	DefaultJumpVelocity = GetCharacterMovement()->JumpZVelocity;
-
-	if (AbilitySystemComponent.IsValid())
+	if (IsValid(AbilitySystemComponent))
 	{
 		AbilitySystemComponent->AbilityActivatedCallbacks.AddUFunction(this, TEXT("AbilityActivated"));
 		AbilitySystemComponent->AbilityCommittedCallbacks.AddUFunction(this, TEXT("AbilityCommited"));
@@ -201,6 +196,33 @@ void APECharacter::BeginPlay()
 	}
 
 	ApplyExtraSettings();
+
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda(
+		[this]
+		{
+			if (IsValid(this))
+			{
+				Server_InitializeCharacter();
+				OnCharacterInit.Broadcast();
+			}
+		}
+	);
+
+	constexpr float InitializationDelay = 1.f;
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, InitializationDelay, false);
+}
+
+void APECharacter::Server_InitializeCharacter_Implementation()
+{
+	Multicast_InitializeCharacter();
+}
+
+void APECharacter::Multicast_InitializeCharacter_Implementation()
+{
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, UGameFrameworkComponentManager::NAME_GameActorReady);
 }
 
 void APECharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -237,8 +259,10 @@ void APECharacter::PerformDeath()
 		}
 	);
 
+	constexpr float DeathDestroyDelay = 15.f;
+
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 15.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, DeathDestroyDelay, false);
 }
 
 void APECharacter::Client_DeathSetup_Implementation()
@@ -291,7 +315,7 @@ void APECharacter::Landed(const FHitResult& Hit)
 	Super::Landed(Hit);
 
 	// Check if this player have a valid ABSC and cancel the Double Jump ability (if active)
-	if (!AbilitySystemComponent.IsValid())
+	if (!IsValid(AbilitySystemComponent))
 	{
 		return;
 	}

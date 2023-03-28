@@ -3,6 +3,7 @@
 // Repo: https://github.com/lucoiso/UEProject_Elementus
 
 #include "Tasks/PEMoveCamera_Task.h"
+#include "LogElementusAbilitySystem.h"
 #include <GameFramework/Character.h>
 #include <Components/TimelineComponent.h>
 #include <Camera/CameraComponent.h>
@@ -28,6 +29,11 @@ void UPEMoveCamera_Task::Activate()
 	Super::Activate();
 	check(Ability);
 
+	if (!IsLocallyControlled())
+	{
+		return;
+	}
+
 	TaskTimeline = NewObject<UTimelineComponent>(GetAvatarActor(), UTimelineComponent::StaticClass(), TEXT("MoveCameraTimeline"));
 	if (!TaskTimeline.IsValid())
 	{
@@ -36,8 +42,7 @@ void UPEMoveCamera_Task::Activate()
 		return;
 	}	
 
-	if (ACharacter* const OwningCharacter = Cast<ACharacter>(Ability->GetAvatarActorFromActorInfo());
-		ensureAlwaysMsgf(IsValid(OwningCharacter), TEXT("%s - Task %s failed to activate because have a invalid owner"), *FString(__func__), *GetName()))
+	if (ACharacter* const OwningCharacter = Cast<ACharacter>(Ability->GetAvatarActorFromActorInfo()); ensureAlwaysMsgf(IsValid(OwningCharacter), TEXT("%s - Task %s failed to activate because have a invalid owner"), *FString(__func__), *GetName()))
 	{
 		UActorComponent* const CameraComp = OwningCharacter->GetComponentByClass(UCameraComponent::StaticClass());
 		if (!IsValid(CameraComp))
@@ -85,8 +90,6 @@ void UPEMoveCamera_Task::RevertCameraPosition()
 
 void UPEMoveCamera_Task::OnDestroy(const bool AbilityIsEnding)
 {
-	UE_LOG(LogElementusAbilitySystem_Internal, Display, TEXT("%s - Task %s ended"), *FString(__func__), *GetName());
-
 	if (TaskTimeline.IsValid() && TaskTimeline->IsPlaying())
 	{
 		UE_LOG(LogElementusAbilitySystem_Internal, Warning, TEXT("%s - Task %s ended while the timeline is playing!"), *FString(__func__), *GetName());

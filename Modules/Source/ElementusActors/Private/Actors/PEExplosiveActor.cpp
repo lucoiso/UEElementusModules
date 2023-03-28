@@ -14,15 +14,16 @@
 
 APEExplosiveActor::APEExplosiveActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), ExplosionRadius(150.f), ExplosionMagnitude(1000.f), bDestroyAfterExplosion(true)
 {
-	bReplicates = false;
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
+	bReplicates = true;
 	bOnlyRelevantToOwner = false;
 	bAlwaysRelevant = false;
 	AActor::SetReplicateMovement(false);
-	NetUpdateFrequency = 100.f;
+	NetUpdateFrequency = 30.f;
 	NetPriority = 1.f;
+	NetDormancy = ENetDormancy::DORM_Initial;
 }
 
 void APEExplosiveActor::PerformExplosion()
@@ -33,8 +34,7 @@ void APEExplosiveActor::PerformExplosion()
 		return;
 	}
 
-	// Only replicates while exploding
-	SetReplicates(true);
+	SetNetDormancy(ENetDormancy::DORM_Awake);
 
 	TArray<FHitResult> HitOut;
 	FCollisionQueryParams QueryParams;
@@ -88,8 +88,7 @@ void APEExplosiveActor::PerformExplosion()
 		return;
 	}
 
-	// Only replicates while exploding
-	SetReplicates(false);
+	SetNetDormancy(ENetDormancy::DORM_DormantAll);
 }
 
 void APEExplosiveActor::ApplyExplosibleEffect(UAbilitySystemComponent* TargetABSC)

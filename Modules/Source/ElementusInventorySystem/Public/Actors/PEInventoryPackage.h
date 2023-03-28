@@ -26,6 +26,10 @@ public:
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 
+	virtual void SetIsCurrentlyFocusedByActor_Implementation(const bool bIsFocused, AActor* ActorFocusing, const FHitResult& HitResult) override;
+
 	virtual bool IsInteractEnabled_Implementation() const override;
 	virtual void DoInteractionBehavior_Implementation(class ACharacter* CharacterInteracting, const FHitResult& HitResult) override;
+
+	TArray<uint32> FocusIDs;
 };

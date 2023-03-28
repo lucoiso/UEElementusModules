@@ -19,6 +19,7 @@
 #include <Abilities/Tasks/AbilityTask_WaitGameplayTag.h>
 #include <Abilities/Tasks/AbilityTask_WaitTargetData.h>
 #include <Abilities/Tasks/AbilityTask_SpawnActor.h>
+#include <Abilities/Tasks/AbilityTask_NetworkSyncPoint.h>
 #include <Abilities/GameplayAbilityTargetActor_SingleLineTrace.h>
 #include <Abilities/GameplayAbilityTargetActor_GroundTrace.h>
 #include <GameplayEffect.h>
@@ -52,21 +53,24 @@ UPEGameplayAbility::UPEGameplayAbility(const FObjectInitializer& ObjectInitializ
 
 void UPEGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ability %s given to %s."), *GetName(), *ActorInfo->AvatarActor->GetName());
-
 	Super::OnGiveAbility(ActorInfo, Spec);
 
+	if (ActorInfo && ActorInfo->AvatarActor.IsValid())
+	{
+		OwningActorName = *ActorInfo->AvatarActor->GetName();
+	}
+
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ability %s given to %s."), *GetName(), *OwningActorName.ToString());
+	
 	// If the ability failed to activate on granting, will notify the ability system component
 	if (bAutoActivateOnGrant && !ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle))
 	{
-		const TArray<FGameplayTag> FailureTags = 
-		{
-			FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.OnGive"), 
+		const TArray<FGameplayTag> FailureTags{
+			FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.OnGive"),
 			FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.TryActivate")
 		};
-		
-		const FGameplayTagContainer FailureContainer = FGameplayTagContainer::CreateFromArray(FailureTags);
-		ActorInfo->AbilitySystemComponent->NotifyAbilityFailed(Spec.Handle, this, FailureContainer);
+
+		ActorInfo->AbilitySystemComponent->NotifyAbilityFailed(Spec.Handle, this, FGameplayTagContainer::CreateFromArray(FailureTags));
 	}
 }
 
@@ -78,9 +82,15 @@ void UPEGameplayAbility::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorI
 
 void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
 {
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Trying to pre-activate ability %s."), *GetName());
-
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
+
+	if (!ShouldActivateAbility(ActorInfo->AvatarActor->GetLocalRole()))
+	{
+		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
+		return;
+	}
+
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s is trying to pre-activate ability %s."), *OwningActorName.ToString(), *GetName());
 
 	// Cancel the ability if can't commit cost or cooldown. Also cancel if has not auth or is not predicted
 	const bool bCanCommitAbility = CommitCheck(Handle, ActorInfo, ActivationInfo);
@@ -88,30 +98,32 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
 	
 	if (!bCanCommitAbility || !bFailsWithAuthority)
 	{
-		TArray FailureTags{FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.PreActivate"),};
+		FGameplayTagContainer FailureTags = FGameplayTagContainer::CreateFromArray(TArray<FGameplayTag>{ FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.PreActivate") });
 
 		if (!bCanCommitAbility)
 		{
-			FailureTags.Add(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.CommitCheck"));
+			FailureTags.AddTag(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.CommitCheck"));
 		}
 		if (!bFailsWithAuthority)
 		{
-			FailureTags.Add(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.HasAuthorityOrPredictionKey"));
+			FailureTags.AddTag(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.HasAuthorityOrPredictionKey"));
 		}
 		if (GetCooldownTimeRemaining() > 0.f)
 		{
-			FailureTags.Add(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.Cooldown"));
+			FailureTags.AddTag(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.Cooldown"));
 		}
 
 		FGameplayTagContainer CharacterTags;
 		ActorInfo->AbilitySystemComponent->GetOwnedGameplayTags(CharacterTags);
+
 		if (CharacterTags.HasAny(ActivationBlockedTags))
 		{
-			FailureTags.Add(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.ActivationBlocked"));
+			FailureTags.AddTag(FGameplayTag::RequestGameplayTag("GameplayAbility.Fail.ActivationBlocked"));
 		}
 
-		const FGameplayTagContainer FailureContainer = FGameplayTagContainer::CreateFromArray(FailureTags);
-		ActorInfo->AbilitySystemComponent->NotifyAbilityFailed(Handle, this, FailureContainer);
+		ActorInfo->AbilitySystemComponent->NotifyAbilityFailed(Handle, this, FailureTags);
+
+		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s failed to pre-activate ability %s."), *OwningActorName.ToString(), *GetName());
 
 		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
 		return;
@@ -165,7 +177,7 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
 
 void UPEGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ability %s activated."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s activated ability %s."), *OwningActorName.ToString(), *GetName());
 
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
@@ -182,7 +194,7 @@ void UPEGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 		ActorInfo = GetCurrentActorInfo();
 	}
 
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ending %s ability."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s' ability %s has been finalized."), *OwningActorName.ToString(), *GetName());
 
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
@@ -219,7 +231,10 @@ void UPEGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 	}
 
 	// Remove extra tags that were given by this ability
-	OwningComp->RemoveLooseGameplayTags(AbilityExtraTags);
+	if (OwningComp->HasAnyMatchingGameplayTags(AbilityExtraTags))
+	{
+		OwningComp->RemoveLooseGameplayTags(AbilityExtraTags);
+	}
 
 	// If the 'Ignore Cooldown' failed, force remove the cooldown tag
 	if (bIgnoreCooldown && GetCooldownTimeRemaining() != 0.f)
@@ -257,8 +272,7 @@ void UPEGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle, 
 	{
 		Super::ApplyCooldown(Handle, ActorInfo, ActivationInfo);
 	}
-	else if (const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, ActivationInfo, CooldownGameplayEffectClass, GetAbilityLevel(Handle, ActorInfo));
-		SpecHandle.IsValid())
+	else if (const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, ActivationInfo, CooldownGameplayEffectClass, GetAbilityLevel(Handle, ActorInfo)); SpecHandle.IsValid())
 	{
 		FGameplayTagContainer CooldownTags_Copy = *GetCooldownTags();
 		CooldownTags_Copy.RemoveTag(FGameplayTag::RequestGameplayTag(GlobalTag_GenericCooldown));	
@@ -279,6 +293,7 @@ bool UPEGameplayAbility::CheckCooldown(const FGameplayAbilitySpecHandle Handle, 
 
 	FGameplayTagContainer CooldownTags_Copy = *GetCooldownTags();
 	CooldownTags_Copy.RemoveTag(FGameplayTag::RequestGameplayTag(GlobalTag_GenericCooldown));
+
 	if (CooldownTags_Copy.IsEmpty())
 	{
 		return true;
@@ -308,8 +323,7 @@ void UPEGameplayAbility::ApplyCost(const FGameplayAbilitySpecHandle Handle, cons
 	{
 		Super::ApplyCost(Handle, ActorInfo, ActivationInfo);
 	}
-	else if (const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, ActivationInfo, CostGameplayEffectClass, GetAbilityLevel(Handle, ActorInfo));
-		SpecHandle.IsValid())
+	else if (const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, ActivationInfo, CostGameplayEffectClass, GetAbilityLevel(Handle, ActorInfo)); SpecHandle.IsValid())
 	{
 		ApplySetByCallerParamsToEffectSpec(AbilityCostSetByCallerData, SpecHandle.Data);
 		ApplyGameplayEffectSpecToOwner(Handle, ActorInfo, ActivationInfo, SpecHandle);
@@ -323,8 +337,7 @@ bool UPEGameplayAbility::CheckCost(const FGameplayAbilitySpecHandle Handle, cons
 		return Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags);
 	}
 	
-	else if (const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, FGameplayAbilityActivationInfo(), CostGameplayEffectClass, GetAbilityLevel(Handle, ActorInfo));
-		SpecHandle.IsValid())
+	else if (const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(Handle, ActorInfo, FGameplayAbilityActivationInfo(), CostGameplayEffectClass, GetAbilityLevel(Handle, ActorInfo)); SpecHandle.IsValid())
 	{
 		ApplySetByCallerParamsToEffectSpec(AbilityCostSetByCallerData, SpecHandle.Data);
 
@@ -386,7 +399,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
 
 	if (GameplayCueTag.IsValid())
 	{
-		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Activating %s ability associated Gameplay Cues with Tag %s."), *GetName(), *GameplayCueTag.ToString());
+		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Activating %s ability associated Gameplay Cues with Tag %s for actor %s."), *GetName(), *GameplayCueTag.ToString(), *OwningActorName.ToString());
 
 		Parameters.AbilityLevel = GetAbilityLevel();
 		Parameters.Instigator = SourceAbilitySystem->GetAvatarActor();
@@ -400,7 +413,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
 	}
 	else
 	{
-		PEABILITY_VLOG_INTERNAL(this, Warning, TEXT("Ability %s failed to activate Gameplay Cue."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Warning, TEXT("Ability %s failed to activate Gameplay Cue for actor %s."), *GetName(), *OwningActorName.ToString());
 	}
 }
 
@@ -413,7 +426,7 @@ void UPEGameplayAbility::BP_ApplyAbilityEffectsToSelf()
 
 void UPEGameplayAbility::ApplyAbilityEffectsToSelf(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to owner."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to actor %s."), *GetName(), *OwningActorName.ToString());
 
 	for (const FGameplayEffectGroupedData& EffectGroup : SelfAbilityEffects)
 	{		
@@ -435,7 +448,7 @@ void UPEGameplayAbility::BP_RemoveAbilityEffectsFromSelf()
 
 void UPEGameplayAbility::RemoveAbilityEffectsFromSelf(const FGameplayAbilityActorInfo* ActorInfo)
 {
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability effects from owner."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability effects from actor %s."), *GetName(), *OwningActorName.ToString());
 
 	for (const FGameplayEffectGroupedData& EffectGroup : SelfAbilityEffects)
 	{
@@ -455,7 +468,7 @@ void UPEGameplayAbility::BP_ApplyAbilityEffectsToTarget(const FGameplayAbilityTa
 
 void UPEGameplayAbility::ApplyAbilityEffectsToTarget(const FGameplayAbilityTargetDataHandle TargetDataHandle, const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to targets."), *GetName());
+	PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s is applying %s ability effects to targets."), *OwningActorName.ToString(), *GetName());
 
 	for (const FGameplayEffectGroupedData& EffectGroup : TargetAbilityEffects)
 	{
@@ -489,7 +502,7 @@ void UPEGameplayAbility::RemoveCooldownEffect(UAbilitySystemComponent* SourceAbi
 {
 	if (IsValid(GetCooldownGameplayEffect()))
 	{
-		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability cooldown."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability cooldown from actor %s."), *GetName(), *OwningActorName.ToString());
 		SourceAbilitySystem->RemoveActiveGameplayEffectBySourceEffect(CooldownGameplayEffectClass, SourceAbilitySystem);
 	}
 }
@@ -498,13 +511,13 @@ void UPEGameplayAbility::PlayAbilitySoundAttached(USceneComponent* InComponent, 
 {
 	if (!IsValid(AbilitySoundData.AbilitySoundFX))
 	{
-		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Tried to play ability %s sound with a null sound object."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null sound object."), *OwningActorName.ToString(), *GetName());
 		return;
 	}
 
 	if (!IsValid(InComponent))
 	{
-		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Tried to play ability %s sound with a null scene component target."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null scene component target."), *OwningActorName.ToString(), *GetName());
 		return;
 	}
 
@@ -515,7 +528,7 @@ void UPEGameplayAbility::PlayAbilitySoundAtLocation(const UObject* WorldContext,
 {
 	if (!IsValid(AbilitySoundData.AbilitySoundFX))
 	{
-		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Tried to play ability %s sound with a null sound object."), *GetName());
+		PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null sound object."), *OwningActorName.ToString(), *GetName());
 		return;
 	}
 	

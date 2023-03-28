@@ -22,9 +22,24 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+	TObjectPtr<class UPEVM_AttributeBase> BasicAttributes_VM;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+	TObjectPtr<class UPEVM_AttributeBase> CustomAttributes_VM;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+	TObjectPtr<class UPEVM_AttributeBase> LevelingAttributes_VM;
+
 	/* A Blueprint Widget class to use as HUD */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Project Elementus | Properties")
 	TSubclassOf<UUserWidget> HUDClass;
+
+	UFUNCTION()
+	virtual void InitializeAttributeViewModels();
+
+	virtual void OnViewModelAttributeChange(const struct FOnAttributeChangeData& AttributeChangeData);
+	void NotifyAttributeChange(const struct FGameplayAttribute& Attribute, const float& NewValue);
 
 private:
 	TWeakObjectPtr<UUserWidget> HUDHandle;

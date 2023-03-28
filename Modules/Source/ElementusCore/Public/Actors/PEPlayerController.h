@@ -6,6 +6,7 @@
 
 #include <CoreMinimal.h>
 #include <InputTriggers.h>
+#include <AbilitySystemInterface.h>
 #include <VisualLogger/VisualLogger.h>
 #include <Interfaces/MFEA_AbilityInputBinding.h>
 #include <Interfaces/PEElementusInventoryProcessor.h>
@@ -52,7 +53,7 @@ struct FPendingAbilityInputData
  *
  */
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
-class ELEMENTUSCORE_API APEPlayerController final : public APlayerController, public IMFEA_AbilityInputBinding, public IPEElementusInventoryProcessor
+class ELEMENTUSCORE_API APEPlayerController final : public APlayerController, public IMFEA_AbilityInputBinding, public IPEElementusInventoryProcessor, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -64,15 +65,9 @@ public:
 	 * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
 	virtual void SetupAbilityBindingByInput_Implementation(UInputAction* Action, const int32 InputID) override;
 
-	UFUNCTION(Client, Reliable)
-	virtual void ProcessAbilityInputAddition(UInputAction* Action, const int32 InputID);
-
 	/* This function came from IMFEA_AbilityInputBinding interface,
 	 * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
 	virtual void RemoveAbilityInputBinding_Implementation(const UInputAction* Action) override;
-		
-	UFUNCTION(Client, Reliable)
-	virtual void ProcessAbilityInputRemoval(const UInputAction* Action);
 #pragma endregion IMFEA_AbilityInputBinding
 
 	/* Setup the spectating state on both client and server */
@@ -82,12 +77,8 @@ public:
 	/* Will respawn the character if the player is in spectating state */
 	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
 	void InitializeRespawn(const float InSeconds);
-	
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Project Elementus | Functions")
-	void PerformAbilityInputQueueAdditions();
-	
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Project Elementus | Functions")
-	void PerformAbilityInputQueueRemovals();
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 protected:
 	virtual void SetupInputComponent() override;
@@ -109,10 +100,19 @@ private:
 	TWeakObjectPtr<UEnum> InputEnumHandle;
 	TMap<TObjectPtr<UInputAction>, FAbilityInputData> AbilityActionBindings;
 
-	UPROPERTY(Replicated)
+	virtual void ProcessAbilityInputAddition(UInputAction* Action, const int32 InputID);
+	virtual void ProcessAbilityInputRemoval(const UInputAction* Action);
+
+	UFUNCTION()
+	void OnRep_AbilityInputAddQueue();
+
+	UPROPERTY(ReplicatedUsing=OnRep_AbilityInputAddQueue)
 	TArray<FPendingAbilityInputData> AbilityInputAddQueue;
-	
-	UPROPERTY(Replicated)
+
+	UFUNCTION()
+	void OnRep_AbilityInputRemoveQueue();
+
+	UPROPERTY(ReplicatedUsing=OnRep_AbilityInputRemoveQueue)
 	TArray<TObjectPtr<const UInputAction>> AbilityInputRemoveQueue;
 
 	UFUNCTION(Category = "Project Elementus | Input Binding")

@@ -16,7 +16,8 @@ public class ElementusAbilitySystem : ModuleRules
 			"Core",
 			"GameplayAbilities",
 			"GameplayTags",
-			"GameplayTasks"
+			"GameplayTasks",
+			"ModelViewViewModel"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new[]
@@ -24,7 +25,6 @@ public class ElementusAbilitySystem : ModuleRules
 			"Engine",
 			"NetCore",
 			"CoreUObject",
-			"ModelViewViewModel",
 			"DeveloperSettings"
 		});
 

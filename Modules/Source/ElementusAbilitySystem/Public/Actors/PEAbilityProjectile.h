@@ -41,7 +41,7 @@ public:
 	TArray<FGameplayEffectGroupedData> ProjectileEffects;
 
 	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void FireInDirection(const FVector Direction) const;
+	void FireInDirection(const FVector& Direction);
 
 protected:
 	UFUNCTION(BlueprintNativeEvent, Category = "Project Elementus | Functions")

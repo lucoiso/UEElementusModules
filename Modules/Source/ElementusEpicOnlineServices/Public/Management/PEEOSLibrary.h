@@ -26,46 +26,46 @@ struct FEOSSessionSettings
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	int32 NumPublicConnections;
+	int32 NumPublicConnections = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	int32 NumPrivateConnections;
+	int32 NumPrivateConnections = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bShouldAdvertise;
+	bool bShouldAdvertise = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowJoinInProgress;
+	bool bAllowJoinInProgress = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bIsLANMatch;
+	bool bIsLANMatch = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bIsDedicated;
+	bool bIsDedicated = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUsesStats;
+	bool bUsesStats = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowInvites;
+	bool bAllowInvites = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUsesPresence;
+	bool bUsesPresence = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowJoinViaPresence;
+	bool bAllowJoinViaPresence = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowJoinViaPresenceFriendsOnly;
+	bool bAllowJoinViaPresenceFriendsOnly = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAntiCheatProtected;
+	bool bAntiCheatProtected = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUseLobbiesIfAvailable;
+	bool bUseLobbiesIfAvailable = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUseLobbiesVoiceChatIfAvailable;
+	bool bUseLobbiesVoiceChatIfAvailable = false;
 
 	FOnlineSessionSettings GetNativeEOSSettings() const;
 };

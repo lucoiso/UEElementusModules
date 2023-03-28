@@ -10,6 +10,7 @@
 #include <GameFramework/Character.h>
 #include "PECharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterInit);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterDeath);
 
 class UPEEquipment;
@@ -42,11 +43,11 @@ protected:
 	virtual void ApplyExtraSettings();
 
 private:
-	TWeakObjectPtr<UPEAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UPEAbilitySystemComponent> AbilitySystemComponent;
 
 public:
 	explicit APECharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
+
 	static const FName PEInventoryComponentName;
 	static const FVector PECameraDefaultPosition;
 
@@ -75,11 +76,15 @@ public:
 protected:
 	UPROPERTY(Replicated, VisibleAnywhere, Category = "Project Elementus | Properties", meta = (Getter = "GetInventoryComponent"))
 	TObjectPtr<UPEInventoryComponent> InventoryComponent;
-	
-	float DefaultWalkSpeed, DefaultCrouchSpeed, DefaultJumpVelocity;
 
 	virtual void PreInitializeComponents() override;
 	virtual void BeginPlay() override;
+
+	UFUNCTION(Server, Reliable)
+	void Server_InitializeCharacter();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_InitializeCharacter();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -102,6 +107,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Project Elementus | Delegates")
 	FOnCharacterDeath OnCharacterDeath;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Project Elementus | Delegates")
+	FOnCharacterInit OnCharacterInit;
 
 private:
 	UFUNCTION(Server, Reliable)

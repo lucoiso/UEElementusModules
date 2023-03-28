@@ -9,11 +9,6 @@
 #include <GameFramework/PlayerState.h>
 #include "PEPlayerState.generated.h"
 
-class UAttributeSet;
-class UGameplayEffect;
-class UPEAbilitySystemComponent;
-class UDataTable;
-struct FGameplayTag;
 /**
  *
  */
@@ -51,7 +46,5 @@ protected:
 	class APEPlayerController* GetPEPlayerController() const;
 
 public:
-	/* Returns associated Ability System Component */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions")
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };

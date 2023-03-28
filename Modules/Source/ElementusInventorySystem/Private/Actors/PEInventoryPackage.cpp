@@ -11,15 +11,17 @@
 
 APEInventoryPackage::APEInventoryPackage(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	bReplicates = true;
+	AActor::SetActorTickInterval(0.1f);
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
+	bReplicates = true;
 	bOnlyRelevantToOwner = false;
 	bAlwaysRelevant = false;
 	AActor::SetReplicateMovement(false);
-	NetUpdateFrequency = 100.f;
+	NetUpdateFrequency = 30.f;
 	NetPriority = 1.f;
+	NetDormancy = ENetDormancy::DORM_Initial;
 
 	PackageMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PackageMesh"));
 	PackageMesh->SetupAttachment(RootComponent);
@@ -41,6 +43,23 @@ void APEInventoryPackage::Tick(const float DeltaSeconds)
 	PackageMesh->AddRelativeRotation(FRotator(0.f, DeltaSeconds * 15.f, 0.f));
 }
 
+void APEInventoryPackage::SetIsCurrentlyFocusedByActor_Implementation(const bool bIsFocused, AActor* ActorFocusing, const FHitResult& HitResult)
+{
+	if (bIsFocused)
+	{
+		FocusIDs.Add(ActorFocusing->GetUniqueID());
+	}
+	else
+	{
+		FocusIDs.Remove(ActorFocusing->GetUniqueID());
+
+		if (FocusIDs.IsEmpty())
+		{
+			SetNetDormancy(ENetDormancy::DORM_DormantAll);
+		}
+	}
+}
+
 bool APEInventoryPackage::IsInteractEnabled_Implementation() const
 {
 	return true;
@@ -48,6 +67,11 @@ bool APEInventoryPackage::IsInteractEnabled_Implementation() const
 
 void APEInventoryPackage::DoInteractionBehavior_Implementation(ACharacter* CharacterInteracting, const FHitResult& HitResult)
 {
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		SetNetDormancy(ENetDormancy::DORM_Awake);
+	}
+
 	if (!CharacterInteracting->IsLocallyControlled())
 	{
 		return;

@@ -55,6 +55,9 @@ class ELEMENTUSABILITYSYSTEM_API UPEGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
+private:
+	FName OwningActorName = NAME_None;
+
 public:
 	explicit UPEGameplayAbility(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 

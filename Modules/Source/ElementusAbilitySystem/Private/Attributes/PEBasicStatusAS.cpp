@@ -47,7 +47,8 @@ void UPEBasicStatusAS::PostAttributeChange(const FGameplayAttribute& Attribute, 
 		// If health is 0 or less, call the death function
 		if (Attribute == GetHealthAttribute())
 		{
-			GetOwningAbilitySystemComponentChecked()->CancelAllAbilities();
+			UAbilitySystemComponent* const TargetABSC = GetOwningAbilitySystemComponentChecked();
+			TargetABSC->CancelAllAbilities();
 
 			const UPEAbilitySystemSettings* const ProjectSettings = UPEAbilitySystemSettings::Get();
 			if (ProjectSettings->GlobalDeathEffect.IsNull())
@@ -56,9 +57,9 @@ void UPEBasicStatusAS::PostAttributeChange(const FGameplayAttribute& Attribute, 
 			}
 
 			const UGameplayEffect* const InDeathEffect = ProjectSettings->GlobalDeathEffect.LoadSynchronous()->GetDefaultObject<UGameplayEffect>();
-			const FGameplayEffectContextHandle InEffectContext = GetOwningAbilitySystemComponent()->MakeEffectContext();
+			const FGameplayEffectContextHandle InEffectContext = TargetABSC->MakeEffectContext();
 
-			GetOwningAbilitySystemComponentChecked()->ApplyGameplayEffectToSelf(InDeathEffect, 1.f, InEffectContext);
+			TargetABSC->ApplyGameplayEffectToSelf(InDeathEffect, 1.f, InEffectContext);
 		}
 
 		// If stamina is 0 or less, cancel abilities that use stamina

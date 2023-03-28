@@ -37,6 +37,7 @@ APEPlayerController::APEPlayerController(const FObjectInitializer& ObjectInitial
 	AActor::SetReplicateMovement(false);
 	NetUpdateFrequency = 100.f;
 	NetPriority = 3.f;
+	NetDormancy = ENetDormancy::DORM_Awake;
 
 	if (const UMFEA_Settings* MF_Settings = GetDefault<UMFEA_Settings>(); !MF_Settings->InputIDEnumeration.IsNull())
 	{
@@ -78,36 +79,19 @@ void APEPlayerController::InitializeRespawn(const float InSeconds)
 	}
 }
 
-void APEPlayerController::PerformAbilityInputQueueAdditions_Implementation()
+UAbilitySystemComponent* APEPlayerController::GetAbilitySystemComponent() const
 {
-	for (const FPendingAbilityInputData& Iterator : AbilityInputAddQueue)
+	if (const APEPlayerState* const State = GetPlayerState<APEPlayerState>())
 	{
-		ProcessAbilityInputAddition(Iterator.Action, Iterator.InputID);
+		return State->GetAbilitySystemComponent();
 	}
-
-	AbilityInputAddQueue.Empty();
-
-	MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputAddQueue, this);
-}
-
-void APEPlayerController::PerformAbilityInputQueueRemovals_Implementation()
-{
-	for (const TObjectPtr<const UInputAction>& Iterator : AbilityInputRemoveQueue)
-	{
-		ProcessAbilityInputRemoval(Iterator);
-	}
-
-	AbilityInputRemoveQueue.Empty();
-
-	MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
+	
+	return UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn());
 }
 
 void APEPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-
-	PerformAbilityInputQueueRemovals();
-	PerformAbilityInputQueueAdditions();
 }
 
 void APEPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -118,6 +102,7 @@ void APEPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	SharedParams.bIsPushBased = true;
 
 	DOREPLIFETIME_WITH_PARAMS_FAST(APEPlayerController, AbilityInputAddQueue, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(APEPlayerController, AbilityInputRemoveQueue, SharedParams);
 }
 
 void APEPlayerController::RespawnAndPossess_Implementation()
@@ -164,8 +149,27 @@ void APEPlayerController::SetupAbilityBindingByInput_Implementation(UInputAction
 	}
 }
 
-void APEPlayerController::ProcessAbilityInputAddition_Implementation(UInputAction* Action, const int32 InputID)
+void APEPlayerController::RemoveAbilityInputBinding_Implementation(const UInputAction* Action)
 {
+	if (IsValid(InputComponent))
+	{
+		ProcessAbilityInputRemoval(Action);
+	}
+	else
+	{
+		AbilityInputRemoveQueue.Add(Action);
+		MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
+	}
+}
+#pragma endregion IMFEA_AbilityInputBinding
+
+void APEPlayerController::ProcessAbilityInputAddition(UInputAction* Action, const int32 InputID)
+{
+	if (!IsValid(Action) || AbilityActionBindings.Contains(Action))
+	{
+		return;
+	}
+
 	CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Setting up ability input binding for %s with action %s and id %u"), *FString(__func__), *GetName(), *Action->GetName(), InputID);
 
 	if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent); ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
@@ -181,21 +185,13 @@ void APEPlayerController::ProcessAbilityInputAddition_Implementation(UInputActio
 	}
 }
 
-void APEPlayerController::RemoveAbilityInputBinding_Implementation(const UInputAction* Action)
+void APEPlayerController::ProcessAbilityInputRemoval(const UInputAction* Action)
 {
-	if (IsValid(InputComponent))
+	if (!AbilityActionBindings.Contains(Action))
 	{
-		ProcessAbilityInputRemoval(Action);
+		return;
 	}
-	else
-	{
-		AbilityInputRemoveQueue.Add(Action);
-		MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
-	}
-}
 
-void APEPlayerController::ProcessAbilityInputRemoval_Implementation(const UInputAction* Action)
-{
 	CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Removing ability input binding for %s with action %s"), *FString(__func__), *GetName(), IsValid(Action) ? *Action->GetName() : *FString("NULL"));
 
 	if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent); ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
@@ -206,7 +202,38 @@ void APEPlayerController::ProcessAbilityInputRemoval_Implementation(const UInput
 		AbilityActionBindings.Remove(Action);
 	}
 }
-#pragma endregion IMFEA_AbilityInputBinding
+
+void APEPlayerController::OnRep_AbilityInputAddQueue()
+{
+	if (AbilityInputAddQueue.IsEmpty())
+	{
+		return;
+	}
+
+	for (const FPendingAbilityInputData& Iterator : AbilityInputAddQueue)
+	{
+		ProcessAbilityInputAddition(Iterator.Action, Iterator.InputID);
+	}
+
+	AbilityInputAddQueue.Empty();
+	MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
+}
+
+void APEPlayerController::OnRep_AbilityInputRemoveQueue()
+{
+	if (AbilityInputAddQueue.IsEmpty())
+	{
+		return;
+	}
+
+	for (const TObjectPtr<const UInputAction>& Iterator : AbilityInputRemoveQueue)
+	{
+		ProcessAbilityInputRemoval(Iterator);
+	}
+
+	AbilityInputRemoveQueue.Empty();
+	MARK_PROPERTY_DIRTY_FROM_NAME(APEPlayerController, AbilityInputRemoveQueue, this);
+}
 
 void APEPlayerController::OnAbilityInputPressed(UInputAction* SourceAction)
 {
@@ -227,8 +254,7 @@ void APEPlayerController::OnAbilityInputPressed(UInputAction* SourceAction)
 	CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Action %s and Input ID Value %u"), *FString(__func__), *SourceAction->GetName(), InputID);
 
 	// Check if controller owner is valid and owns a ability system component
-	if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn());
-		ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
+	if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn()); ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
 	{
 		// Send the input pressed event to the ability system component with the found input ID
 		TargetABSC->AbilityLocalInputPressed(InputID);
@@ -268,8 +294,7 @@ void APEPlayerController::OnAbilityInputReleased(UInputAction* SourceAction)
 	CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Action %s and Input ID Value %u"), *FString(__func__), *SourceAction->GetName(), InputID);
 
 	// Check if controller owner is valid and owns a ability system component
-	if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn());
-		ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
+	if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn()); ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
 	{
 		// Send the input released event to the ability system component with the found input ID
 		TargetABSC->AbilityLocalInputReleased(InputID);

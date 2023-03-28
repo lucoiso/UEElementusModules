@@ -35,37 +35,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
 	void RemoveEffectGroupedDataFromTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, UAbilitySystemComponent* TargetABSC, const int32 StacksToRemove = 1);
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	TObjectPtr<UPEVM_AttributeBase> BasicAttributes_VM;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	TObjectPtr<UPEVM_AttributeBase> CustomAttributes_VM;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	TObjectPtr<UPEVM_AttributeBase> LevelingAttributes_VM;
-	
+		
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
-
-	virtual void InitializeAttributeViewModel(const UAttributeSet* AttributeClass);
-
 	virtual void ResetAbilitySystemComponent();
-
-protected:
-	virtual void OnViewModelAttributeChange(const FOnAttributeChangeData& AttributeChangeData);
-
-	UFUNCTION(Client, Reliable)
-	void InitializeViewModelAttributeData_Client(const FGameplayAttribute& Attribute, const float& NewValue);
-
-	UFUNCTION(Client, Unreliable)
-	void OnViewModelAttributeChange_Client(const FGameplayAttribute& Attribute, const float& NewValue);
-
-	void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue);
-
-	TArray<FName> UninitializedViewModelAttributes;
-
-private:
-	void InitializeBasicAttributesViewModel(const class UPEBasicStatusAS* Attribute);
-	void InitializeCustomAttributesViewModel(const class UPECustomStatusAS* Attribute);
-	void InitializeLevelingAttributesViewModel(const class UPELevelingAS* Attribute);
 };
