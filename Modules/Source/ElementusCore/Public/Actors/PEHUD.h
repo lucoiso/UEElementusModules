@@ -12,7 +12,7 @@
  *
  */
 UCLASS(Blueprintable, NotPlaceable, Category = "Project Elementus | Classes")
-class ELEMENTUSCORE_API APEHUD final : public AHUD
+class ELEMENTUSCORE_API APEHUD : public AHUD
 {
 	GENERATED_BODY()
 

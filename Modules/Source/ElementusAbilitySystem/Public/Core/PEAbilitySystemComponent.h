@@ -15,7 +15,7 @@ class UPEVM_AttributeBase;
  *
  */
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
-class ELEMENTUSABILITYSYSTEM_API UPEAbilitySystemComponent final : public UAbilitySystemComponent
+class ELEMENTUSABILITYSYSTEM_API UPEAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 

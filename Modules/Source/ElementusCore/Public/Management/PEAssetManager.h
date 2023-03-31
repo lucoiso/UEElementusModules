@@ -12,7 +12,7 @@
  *
  */
 UCLASS(MinimalAPI, Category = "Project Elementus | Classes")
-class UPEAssetManager final : public UAssetManager
+class UPEAssetManager : public UAssetManager
 {
 	GENERATED_BODY()
 

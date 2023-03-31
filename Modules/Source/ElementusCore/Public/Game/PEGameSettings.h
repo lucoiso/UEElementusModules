@@ -12,7 +12,7 @@
  * 
  */
 UCLASS(Config = GameUserSettings, configdonotcheckdefaults, Category = "Project Elementus | Classes")
-class ELEMENTUSCORE_API UPEGameSettings final : public UGameUserSettings
+class ELEMENTUSCORE_API UPEGameSettings : public UGameUserSettings
 {
 	GENERATED_BODY()
 

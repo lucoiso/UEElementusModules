@@ -256,21 +256,32 @@ void APEPlayerController::OnAbilityInputPressed(UInputAction* SourceAction)
 	// Check if controller owner is valid and owns a ability system component
 	if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn()); ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
 	{
-		// Send the input pressed event to the ability system component with the found input ID
-		TargetABSC->AbilityLocalInputPressed(InputID);
+		const FGameplayTag WaitingConfirmTag = FGameplayTag::RequestGameplayTag(GlobalTag_WaitingConfirmationState);
+		const FGameplayTag WaitingCancelTag = FGameplayTag::RequestGameplayTag(GlobalTag_WaitingCancelationState);		
+
+		const bool bWaitingConfirmCancel = TargetABSC->HasAnyMatchingGameplayTags(FGameplayTagContainer::CreateFromArray(TArray<FGameplayTag>{ WaitingConfirmTag, WaitingCancelTag }));
+		bool bProceedWithPress = true;
 
 		// Verify if the found input ID is equal to Confirm or Cancel input from the specified Enumeration class
-		if (ensureAlwaysMsgf(InputEnumHandle.IsValid(), TEXT("%s have a invalid InputEnumHandle"), *GetName()))
+		if (bWaitingConfirmCancel && ensureAlwaysMsgf(InputEnumHandle.IsValid(), TEXT("%s have a invalid InputEnumHandle"), *GetName()))
 		{
-			if (InputID == InputEnumHandle->GetValueByName("Confirm", EGetByNameFlags::CheckAuthoredName))
+			if (TargetABSC->HasMatchingGameplayTag(WaitingConfirmTag) && InputID == InputEnumHandle->GetValueByName("Confirm", EGetByNameFlags::CheckAuthoredName))
 			{
 				TargetABSC->LocalInputConfirm();
+				bProceedWithPress = false;
 			}
 
-			else if (InputID == InputEnumHandle->GetValueByName("Cancel", EGetByNameFlags::CheckAuthoredName))
+			else if (TargetABSC->HasMatchingGameplayTag(WaitingCancelTag) && InputID == InputEnumHandle->GetValueByName("Cancel", EGetByNameFlags::CheckAuthoredName))
 			{
 				TargetABSC->LocalInputCancel();
+				bProceedWithPress = false;
 			}
+		}
+
+		if (bProceedWithPress)
+		{
+			// Send the input pressed event to the ability system component with the found input ID
+			TargetABSC->AbilityLocalInputPressed(InputID);
 		}
 	}
 }

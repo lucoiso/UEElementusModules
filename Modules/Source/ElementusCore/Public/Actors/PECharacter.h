@@ -25,7 +25,7 @@ class UPEInventoryComponent;
  *
  */
 UCLASS(config = Game, Category = "Project Elementus | Classes")
-class ELEMENTUSCORE_API APECharacter final : public ACharacter, public IAbilitySystemInterface
+class ELEMENTUSCORE_API APECharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
