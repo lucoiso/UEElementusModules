@@ -5,6 +5,7 @@
 #pragma once
 
 #include <CoreMinimal.h>
+#include <Engine/DataAsset.h>
 #include "PEAbilityData.generated.h"
 
 class UGameplayAbility;

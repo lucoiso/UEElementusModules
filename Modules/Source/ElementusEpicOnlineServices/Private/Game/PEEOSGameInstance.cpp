@@ -5,8 +5,9 @@
 #include "Game/PEEOSGameInstance.h"
 #include "Management/PEEOSLibrary.h"
 #include "LogElementusEpicOnlineServices.h"
-#include <JsonObjectConverter.h>
+#include <Online/OnlineSessionNames.h>
 #include <Kismet/GameplayStatics.h>
+#include <JsonObjectConverter.h>
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEEOSGameInstance)
 

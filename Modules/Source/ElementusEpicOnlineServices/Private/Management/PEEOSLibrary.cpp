@@ -3,6 +3,7 @@
 // Repo: https://github.com/lucoiso/UEProject_Elementus
 
 #include "Management/PEEOSLibrary.h"
+#include <Online/OnlineSessionNames.h>
 #include <EOSVoiceChatUser.h>
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEEOSLibrary)
