@@ -5,7 +5,7 @@
 #include "ViewModels/Attributes/PEVM_AttributeBase.h"
 
 #if UE_WITH_IRIS
-#include <Iris/ReplicationCore/ReplicationFragmentUtil.h>
+#include <Iris/ReplicationSystem/ReplicationFragmentUtil.h>
 #endif // UE_WITH_IRIS
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PEVM_AttributeBase)
