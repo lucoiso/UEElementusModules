@@ -17,123 +17,123 @@
 #include "PEEOSLibrary.generated.h"
 
 /**
- * 
+ *
  */
 
 USTRUCT(BlueprintType, Category = "Project Elementus | Structs")
 struct FEOSSessionSettings
 {
-	GENERATED_BODY()
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	int32 NumPublicConnections = 0;
+    GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	int32 NumPrivateConnections = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    int32 NumPublicConnections = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bShouldAdvertise = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    int32 NumPrivateConnections = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowJoinInProgress = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bShouldAdvertise = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bIsLANMatch = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bAllowJoinInProgress = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bIsDedicated = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bIsLANMatch = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUsesStats = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bIsDedicated = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowInvites = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bUsesStats = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUsesPresence = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bAllowInvites = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowJoinViaPresence = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bUsesPresence = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAllowJoinViaPresenceFriendsOnly = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bAllowJoinViaPresence = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bAntiCheatProtected = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bAllowJoinViaPresenceFriendsOnly = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUseLobbiesIfAvailable = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bAntiCheatProtected = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
-	bool bUseLobbiesVoiceChatIfAvailable = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bUseLobbiesIfAvailable = false;
 
-	FOnlineSessionSettings GetNativeEOSSettings() const;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus")
+    bool bUseLobbiesVoiceChatIfAvailable = false;
+
+    FOnlineSessionSettings GetNativeEOSSettings() const;
 };
 
 USTRUCT(BlueprintType, Category = "Project Elementus | Structs")
 struct FSessionDataHandler
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	FOnlineSessionSearchResult Result;
+    FOnlineSessionSearchResult Result;
 };
 
 UCLASS(Category = "Project Elementus | Classes")
 class ELEMENTUSEPICONLINESERVICES_API UPEEOSLibrary final : public UBlueprintFunctionLibrary
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	static FOnlineSubsystemEOS* GetOnlineSubsystemEOS();
+    static FOnlineSubsystemEOS* GetOnlineSubsystemEOS();
 
-	static FEOSVoiceChatUser* GetEOSVoiceChatUser(const uint8 LocalUserNum);
+    static FEOSVoiceChatUser* GetEOSVoiceChatUser(const uint8 LocalUserNum);
 
-	/* Mute the user in session */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (DisplayName = "Mute EOS User in Session"))
-	static void MuteEOSSessionVoiceChatUser(const int32 LocalUserNum, const bool bMute);
+    /* Mute the user in session */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (DisplayName = "Mute EOS User in Session"))
+    static void MuteEOSSessionVoiceChatUser(const int32 LocalUserNum, const bool bMute);
 
-	/* Get the session owning user name from a session data handler */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Owning User Name from Handle"))
-	static FString GetEOSSessionOwningUserNameFromHandle(const FSessionDataHandler DataHandle);
+    /* Get the session owning user name from a session data handler */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Owning User Name from Handle"))
+    static FString GetEOSSessionOwningUserNameFromHandle(const FSessionDataHandler DataHandle);
 
-	/* Get the session id from data handler */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Id from Handle"))
-	static FString GetEOSSessionIdFromHandle(const FSessionDataHandler DataHandle);
+    /* Get the session id from data handler */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Id from Handle"))
+    static FString GetEOSSessionIdFromHandle(const FSessionDataHandler DataHandle);
 
-	/* Get the session ping from data handler */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Ping from Handle"))
-	static int32 GetEOSSessionPingFromHandle(const FSessionDataHandler DataHandle);
+    /* Get the session ping from data handler */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Ping from Handle"))
+    static int32 GetEOSSessionPingFromHandle(const FSessionDataHandler DataHandle);
 
-	/* Get the default EOS session name */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Name"))
-	static FName GetEOSSessionName();
+    /* Get the default EOS session name */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Get EOS Session Name"))
+    static FName GetEOSSessionName();
 
-	/* Check if the user is logged in EOS */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Is User Logged in EOS"))
-	static bool IsUserLoggedInEOS(const int32 LocalUserNum);
+    /* Check if the user is logged in EOS */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Is User Logged in EOS"))
+    static bool IsUserLoggedInEOS(const int32 LocalUserNum);
 
-	/* Check if the user is hosting a session */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Is Hosting EOS Session"))
-	static bool IsHostingEOSSession();
+    /* Check if the user is hosting a session */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Is Hosting EOS Session"))
+    static bool IsHostingEOSSession();
 
-	/* Check if the user is in a session */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Is User in a EOS Session"))
-	static bool IsUserInAEOSSession();
+    /* Check if the user is in a session */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Functions", meta = (DisplayName = "Is User in a EOS Session"))
+    static bool IsUserInAEOSSession();
 
-	/* Update the user presence in EOS overlay */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (DisplayName = "Update EOS Presence"))
-	static void UpdateEOSPresence(const int32 LocalUserNum, const FString& PresenceText, const bool bOnline);
+    /* Update the user presence in EOS overlay */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (DisplayName = "Update EOS Presence"))
+    static void UpdateEOSPresence(const int32 LocalUserNum, const FString& PresenceText, const bool bOnline);
 
-	/* Modify all EOS stats in the given map */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (DisplayName = "Ingest EOS Stats"))
-	static void IngestEOSStats(const int32 LocalUserNum, const TMap<FName, int32>& StatsMap);
+    /* Modify all EOS stats in the given map */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (DisplayName = "Ingest EOS Stats"))
+    static void IngestEOSStats(const int32 LocalUserNum, const TMap<FName, int32>& StatsMap);
 
-	static const FUniqueNetIdPtr GetUniqueNetId(const int32 LocalUserNum, IOnlineSubsystem* OnlineSubsystem = nullptr);
-	static const IOnlineIdentityPtr GetIdentityInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
-	static const IOnlineSessionPtr GetSessionInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
-	static const IOnlinePresencePtr GetPresenceInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
-	static const IOnlineStatsPtr GetStatsInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
+    static const FUniqueNetIdPtr GetUniqueNetId(const int32 LocalUserNum, IOnlineSubsystem* OnlineSubsystem = nullptr);
+    static const IOnlineIdentityPtr GetIdentityInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
+    static const IOnlineSessionPtr GetSessionInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
+    static const IOnlinePresencePtr GetPresenceInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
+    static const IOnlineStatsPtr GetStatsInterface(IOnlineSubsystem* OnlineSubsystem = nullptr);
 
 private:
-	static bool ValidateOnlineSubsystem(IOnlineSubsystem*& OnlineSubsystem);
+    static bool ValidateOnlineSubsystem(IOnlineSubsystem*& OnlineSubsystem);
 };

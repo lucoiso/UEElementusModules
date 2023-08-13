@@ -9,77 +9,77 @@
 #include "PECoreSettings.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Config = Plugins, DefaultConfig, Meta = (DisplayName = "Elementus Module: Core"))
 class ELEMENTUSCORE_API UPECoreSettings : public UDeveloperSettings
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPECoreSettings(const FObjectInitializer& ObjectInitializer);
-	static const UPECoreSettings* Get();
+    explicit UPECoreSettings(const FObjectInitializer& ObjectInitializer);
+    static const UPECoreSettings* Get();
 
-	/* Will print extra internal informations in log */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Internal Logs"))
-	bool bEnableInternalLogs;
+    /* Will print extra internal informations in log */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Internal Logs"))
+    bool bEnableInternalLogs;
 
-	/* Will print extra internal informations in log */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Base Controller Logs"))
-	bool bEnableBaseControllerLogs;
+    /* Will print extra internal informations in log */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Base Controller Logs"))
+    bool bEnableBaseControllerLogs;
 
-	/* Will print extra internal informations in log */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Axis Controller Logs"))
-	bool bEnableAxisControllerLogs;
-	
-	/* A Blueprint Widget class to use as HUD */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "UI", Meta = (DisplayName = "HUD UMG Class"))
-	TSoftClassPtr<UUserWidget> HUDClass;
+    /* Will print extra internal informations in log */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Axis Controller Logs"))
+    bool bEnableAxisControllerLogs;
 
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Core")
-	TSoftObjectPtr<USkeletalMesh> CharacterMesh;
+    /* A Blueprint Widget class to use as HUD */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "UI", Meta = (DisplayName = "HUD UMG Class"))
+    TSoftClassPtr<UUserWidget> HUDClass;
 
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Core")
-	TSoftClassPtr<UAnimInstance> CharacterAnimBP;
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Core")
+    TSoftObjectPtr<USkeletalMesh> CharacterMesh;
 
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Core")
-	TSoftClassPtr<APawn> CharacterPawn;
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Core")
+    TSoftClassPtr<UAnimInstance> CharacterAnimBP;
 
-	/* Color of player character's mesh */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Appearance")
-	FLinearColor PlayerColor;
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Core")
+    TSoftClassPtr<APawn> CharacterPawn;
 
-	/* Color of bot character's mesh */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Appearance")
-	FLinearColor BotColor;
+    /* Color of player character's mesh */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Appearance")
+    FLinearColor PlayerColor;
 
-	/* Default Gravity Scale that will be added to character's movement component */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
-	float DefaultGravityScale;
+    /* Color of bot character's mesh */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Appearance")
+    FLinearColor BotColor;
 
-	/* Default Walk Speed that will be applied to character's movement component */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
-	float DefaultWalkSpeed;
+    /* Default Gravity Scale that will be added to character's movement component */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
+    float DefaultGravityScale;
 
-	/* Default Crouch Speed that will be applied to character's movement component */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics", meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
-	float DefaultCrouchSpeedPercentage;
+    /* Default Walk Speed that will be applied to character's movement component */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
+    float DefaultWalkSpeed;
 
-	/* Default Jump Z Velocity that will be applied to character's movement component */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
-	float DefaultJumpZVelocity;
+    /* Default Crouch Speed that will be applied to character's movement component */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics", meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+    float DefaultCrouchSpeedPercentage;
 
-	/* Default Air Control that will be applied to character's movement component */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
-	float DefaultAirControl;
+    /* Default Jump Z Velocity that will be applied to character's movement component */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
+    float DefaultJumpZVelocity;
+
+    /* Default Air Control that will be applied to character's movement component */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Character | Physics")
+    float DefaultAirControl;
 
 protected:
 #if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
-	virtual void PostInitProperties() override;
+    virtual void PostInitProperties() override;
 
 private:
-	void ToggleInternalLogs();
+    void ToggleInternalLogs();
 };

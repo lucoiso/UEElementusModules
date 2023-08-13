@@ -9,8 +9,8 @@
 
 void UPEAssetManager::StartInitialLoading()
 {
-	Super::StartInitialLoading();
+    Super::StartInitialLoading();
 
-	// Should be called once as part of project setup to load global data tables and tags - From AbilitySystemGlobals.h
-	UAbilitySystemGlobals::Get().InitGlobalData();
+    // Should be called once as part of project setup to load global data tables and tags - From AbilitySystemGlobals.h
+    UAbilitySystemGlobals::Get().InitGlobalData();
 }

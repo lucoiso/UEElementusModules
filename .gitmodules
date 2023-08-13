@@ -1,5 +1,5 @@
-[submodule "Dependencies/UEModularFeatures_ExtraActions"]
-	path = Dependencies/UEModularFeatures_ExtraActions
+[submodule "Dependencies/UEMF_EA"]
+	path = Dependencies/UEMF_EA
 	url = https://github.com/lucoiso/UEModularFeatures_ExtraActions.git
 	branch = development
 [submodule "Dependencies/UEElementusInventory"]

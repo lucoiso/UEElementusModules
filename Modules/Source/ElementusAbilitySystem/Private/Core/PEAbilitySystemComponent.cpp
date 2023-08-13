@@ -12,164 +12,164 @@
 
 UPEAbilitySystemComponent::UPEAbilitySystemComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	SetIsReplicated(true);
-	ReplicationMode = EGameplayEffectReplicationMode::Minimal;
+    SetIsReplicated(true);
+    ReplicationMode = EGameplayEffectReplicationMode::Minimal;
 }
 
 void UPEAbilitySystemComponent::ApplyEffectGroupedDataToSelf(const FGameplayEffectGroupedData GroupedData)
 {
-	if (!IsOwnerActorAuthoritative())
-	{
-		return;
-	}
+    if (!IsOwnerActorAuthoritative())
+    {
+        return;
+    }
 
-	const FGameplayEffectSpecHandle& SpecHandle = MakeOutgoingSpec(GroupedData.EffectClass, 1.f, MakeEffectContext());
+    const FGameplayEffectSpecHandle& SpecHandle = MakeOutgoingSpec(GroupedData.EffectClass, 1.f, MakeEffectContext());
 
-	for (const TPair<FGameplayTag, float>& StackedData : GroupedData.SetByCallerStackedData)
-	{
-		SpecHandle.Data.Get()->SetSetByCallerMagnitude(StackedData.Key, StackedData.Value);
-	}
+    for (const TPair<FGameplayTag, float>& StackedData : GroupedData.SetByCallerStackedData)
+    {
+        SpecHandle.Data.Get()->SetSetByCallerMagnitude(StackedData.Key, StackedData.Value);
+    }
 
-	if (SpecHandle.IsValid())
-	{
-		ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
-	}
+    if (SpecHandle.IsValid())
+    {
+        ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
+    }
 }
 
 void UPEAbilitySystemComponent::ApplyEffectGroupedDataToTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* TargetABSC)
 {
-	if (!IsOwnerActorAuthoritative())
-	{
-		return;
-	}
+    if (!IsOwnerActorAuthoritative())
+    {
+        return;
+    }
 
-	const FGameplayEffectSpecHandle& SpecHandle = MakeOutgoingSpec(GroupedData.EffectClass, 1.f, MakeEffectContext());
+    const FGameplayEffectSpecHandle& SpecHandle = MakeOutgoingSpec(GroupedData.EffectClass, 1.f, MakeEffectContext());
 
-	for (const TPair<FGameplayTag, float>& StackedData : GroupedData.SetByCallerStackedData)
-	{
-		SpecHandle.Data.Get()->SetSetByCallerMagnitude(StackedData.Key, StackedData.Value);
-	}
+    for (const TPair<FGameplayTag, float>& StackedData : GroupedData.SetByCallerStackedData)
+    {
+        SpecHandle.Data.Get()->SetSetByCallerMagnitude(StackedData.Key, StackedData.Value);
+    }
 
-	if (SpecHandle.IsValid())
-	{
-		ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetABSC);
-	}
+    if (SpecHandle.IsValid())
+    {
+        ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetABSC);
+    }
 }
 
 void UPEAbilitySystemComponent::RemoveEffectGroupedDataFromSelf(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, const int32 StacksToRemove)
 {
-	if (!IsOwnerActorAuthoritative())
-	{
-		return;
-	}
-	
-	if (!IsValid(GroupedData.EffectClass))
-	{
-		return;
-	}
-	
-	FGameplayEffectQuery Query;
-	Query.CustomMatchDelegate.BindLambda(
-		[&](const FActiveGameplayEffect& CurEffect)
-		{
-			bool bMatches = false;
+    if (!IsOwnerActorAuthoritative())
+    {
+        return;
+    }
 
-			if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
-			{
-				for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
-				{
-					bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
+    if (!IsValid(GroupedData.EffectClass))
+    {
+        return;
+    }
 
-					if (!bMatches)
-					{
-						break;
-					}
-				}
-			}
+    FGameplayEffectQuery Query;
+    Query.CustomMatchDelegate.BindLambda(
+        [&](const FActiveGameplayEffect& CurEffect)
+        {
+            bool bMatches = false;
 
-			return bMatches;
-		}
-	);
+            if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
+            {
+                for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
+                {
+                    bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
 
-	bIsNetDirty = true;
-	RemoveActiveEffects(Query, StacksToRemove);
+                    if (!bMatches)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return bMatches;
+        }
+    );
+
+    bIsNetDirty = true;
+    RemoveActiveEffects(Query, StacksToRemove);
 }
 
 void UPEAbilitySystemComponent::RemoveEffectGroupedDataFromTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, UAbilitySystemComponent* TargetABSC, const int32 StacksToRemove)
 {
-	if (!IsOwnerActorAuthoritative())
-	{
-		return;
-	}
+    if (!IsOwnerActorAuthoritative())
+    {
+        return;
+    }
 
-	if (!IsValid(GroupedData.EffectClass))
-	{
-		return;
-	}
+    if (!IsValid(GroupedData.EffectClass))
+    {
+        return;
+    }
 
-	FGameplayEffectQuery Query;
-	Query.CustomMatchDelegate.BindLambda(
-		[&](const FActiveGameplayEffect& CurEffect)
-		{
-			bool bMatches = false;
+    FGameplayEffectQuery Query;
+    Query.CustomMatchDelegate.BindLambda(
+        [&](const FActiveGameplayEffect& CurEffect)
+        {
+            bool bMatches = false;
 
-			if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
-			{
-				for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
-				{
-					bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
+            if (IsValid(CurEffect.Spec.Def) && GroupedData.EffectClass == CurEffect.Spec.Def->GetClass() && InstigatorABSC == CurEffect.Spec.GetEffectContext().GetInstigatorAbilitySystemComponent())
+            {
+                for (const TPair<FGameplayTag, float>& Iterator : GroupedData.SetByCallerStackedData)
+                {
+                    bMatches = CurEffect.Spec.SetByCallerTagMagnitudes.FindRef(Iterator.Key) == Iterator.Value;
 
-					if (!bMatches)
-					{
-						break;
-					}
-				}
-			}
+                    if (!bMatches)
+                    {
+                        break;
+                    }
+                }
+            }
 
-			return bMatches;
-		}
-	);
+            return bMatches;
+        }
+    );
 
-	bIsNetDirty = true;
-	TargetABSC->RemoveActiveEffects(Query, StacksToRemove);
+    bIsNetDirty = true;
+    TargetABSC->RemoveActiveEffects(Query, StacksToRemove);
 }
 
 void UPEAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)
 {
-	Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
+    Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
 }
 
 void UPEAbilitySystemComponent::ResetAbilitySystemComponent()
 {
-	if (!IsOwnerActorAuthoritative())
-	{
-		return;
-	}
+    if (!IsOwnerActorAuthoritative())
+    {
+        return;
+    }
 
-	/* Currently unstable - WiP */
+    /* Currently unstable - WiP */
 
-	// CancelAllAbilities();
-	// ClearAllAbilities();
-	// RemoveAllReplicatedInstancedAbilities();
-	// 
-	// FGameplayEffectQuery Query;
-	// FGameplayTagQuery TagQuery;
-	// 
-	// const TArray<FGameplayTag> NoTagsArr = {
-	// 	FGameplayTag::RequestGameplayTag(GlobalTag_DeadState),
-	// 	FGameplayTag::RequestGameplayTag(GlobalTag_StunState)
-	// };
-	// 
-	// TagQuery.MakeQuery_MatchNoTags(FGameplayTagContainer::CreateFromArray(NoTagsArr));
-	// Query.EffectTagQuery = TagQuery;
-	// 
-	// for (const FActiveGameplayEffectHandle& ActiveSpecHandle : GetActiveEffects(Query))
-	// {
-	// 	RemoveActiveGameplayEffect(ActiveSpecHandle);
-	// }
-	// 
-	// RemoveAllSpawnedAttributes();
-	// RemoveAllGameplayCues();
-	// 
-	// ClearActorInfo();
+    // CancelAllAbilities();
+    // ClearAllAbilities();
+    // RemoveAllReplicatedInstancedAbilities();
+    //
+    // FGameplayEffectQuery Query;
+    // FGameplayTagQuery TagQuery;
+    //
+    // const TArray<FGameplayTag> NoTagsArr = {
+    // 	FGameplayTag::RequestGameplayTag(GlobalTag_DeadState),
+    // 	FGameplayTag::RequestGameplayTag(GlobalTag_StunState)
+    // };
+    //
+    // TagQuery.MakeQuery_MatchNoTags(FGameplayTagContainer::CreateFromArray(NoTagsArr));
+    // Query.EffectTagQuery = TagQuery;
+    //
+    // for (const FActiveGameplayEffectHandle& ActiveSpecHandle : GetActiveEffects(Query))
+    // {
+    // 	RemoveActiveGameplayEffect(ActiveSpecHandle);
+    // }
+    //
+    // RemoveAllSpawnedAttributes();
+    // RemoveAllGameplayCues();
+    //
+    // ClearActorInfo();
 }

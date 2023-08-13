@@ -9,13 +9,13 @@
 #include "PELineTargeting.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API APELineTargeting : public AGameplayAbilityTargetActor_SingleLineTrace
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APELineTargeting(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APELineTargeting(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

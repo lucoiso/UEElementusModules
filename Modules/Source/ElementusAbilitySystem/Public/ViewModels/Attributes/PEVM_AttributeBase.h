@@ -46,21 +46,21 @@ if (MemberName <= 0.f || MaxMemberName <= 0.f) \
 return MemberName / MaxMemberName;
 
 /**
- * 
+ *
  */
 UCLASS(Abstract, BlueprintType, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPEVM_AttributeBase : public UMVVMViewModelBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	friend class UPEAbilitySystemComponent;
+    friend class UPEAbilitySystemComponent;
 
 public:
-	explicit UPEVM_AttributeBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEVM_AttributeBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue);
+    virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue);
 
 #if UE_WITH_IRIS
-	virtual void RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags);
+    virtual void RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags);
 #endif // UE_WITH_IRIS
 };

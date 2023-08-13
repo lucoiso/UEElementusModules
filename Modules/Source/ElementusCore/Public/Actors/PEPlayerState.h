@@ -25,26 +25,26 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPlayerState, NoLogging, All);
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSCORE_API APEPlayerState : public APlayerState, public IAbilitySystemInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APEPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APEPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 private:
-	void DeathStateChanged_Callback(const FGameplayTag CallbackTag, int32 NewCount) const;
-	void StunStateChanged_Callback(const FGameplayTag CallbackTag, int32 NewCount) const;
+    void DeathStateChanged_Callback(const FGameplayTag CallbackTag, int32 NewCount) const;
+    void StunStateChanged_Callback(const FGameplayTag CallbackTag, int32 NewCount) const;
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-	/* Player associated Ability System Component */
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus | Properties", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UPEAbilitySystemComponent> AbilitySystemComponent;
+    /* Player associated Ability System Component */
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus | Properties", meta = (AllowPrivateAccess = "true"))
+    TObjectPtr<UPEAbilitySystemComponent> AbilitySystemComponent;
 
-	/* Returns a casted version of Player Controller using PEPlayerController class */
-	UFUNCTION(BlueprintPure, Category = "Project Elementus | Properties", meta = (DisplayName = "Get Casted Player Controller: APEPlayerController"))
-	class APEPlayerController* GetPEPlayerController() const;
+    /* Returns a casted version of Player Controller using PEPlayerController class */
+    UFUNCTION(BlueprintPure, Category = "Project Elementus | Properties", meta = (DisplayName = "Get Casted Player Controller: APEPlayerController"))
+    class APEPlayerController* GetPEPlayerController() const;
 
 public:
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };

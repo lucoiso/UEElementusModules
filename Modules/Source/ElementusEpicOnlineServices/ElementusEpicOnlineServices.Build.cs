@@ -6,31 +6,31 @@ using UnrealBuildTool;
 
 public class ElementusEpicOnlineServices : ModuleRules
 {
-	public ElementusEpicOnlineServices(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		CppStandard = CppStandardVersion.Cpp17;
+    public ElementusEpicOnlineServices(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        CppStandard = CppStandardVersion.Cpp17;
 
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"Core",
-			"EOSSDKHandler",
-			"EOSVoiceChat",
-			"EOSShared",
-			"OnlineSubsystemEOS",
-			"OnlineSubsystem",
-			"VoiceChat"
-		});
+        PublicDependencyModuleNames.AddRange(new[]
+        {
+            "Core",
+            "EOSSDKHandler",
+            "EOSVoiceChat",
+            "EOSShared",
+            "OnlineSubsystemEOS",
+            "OnlineSubsystem",
+            "VoiceChat"
+        });
 
-		PrivateDependencyModuleNames.AddRange(new[]
-		{
-			"Engine",
-			"NetCore",
-			"CoreUObject",
-			"JsonUtilities",
-			"DeveloperSettings"
-		});
+        PrivateDependencyModuleNames.AddRange(new[]
+        {
+            "Engine",
+            "NetCore",
+            "CoreUObject",
+            "JsonUtilities",
+            "DeveloperSettings"
+        });
 
-		SetupIrisSupport(Target);
-	}
+        SetupIrisSupport(Target);
+    }
 }

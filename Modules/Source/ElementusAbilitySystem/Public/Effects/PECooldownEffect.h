@@ -9,13 +9,13 @@
 #include "PECooldownEffect.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPECooldownEffect : public UGameplayEffect
 {
-	GENERATED_BODY()
-		
+    GENERATED_BODY()
+
 public:
-	explicit UPECooldownEffect(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPECooldownEffect(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

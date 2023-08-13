@@ -14,8 +14,8 @@
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSCORE_API APEAIController : public AAIController
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APEAIController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APEAIController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

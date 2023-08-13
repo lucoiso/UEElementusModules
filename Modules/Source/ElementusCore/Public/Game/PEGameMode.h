@@ -14,12 +14,12 @@
 UCLASS(MinimalAPI, Category = "Project Elementus | Classes")
 class APEGameMode : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APEGameMode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APEGameMode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	/* Define if the players can respawn or not in the current context */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus | Properties")
-	bool bCanRespawn;
+    /* Define if the players can respawn or not in the current context */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Project Elementus | Properties")
+    bool bCanRespawn;
 };

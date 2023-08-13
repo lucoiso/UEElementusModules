@@ -9,13 +9,13 @@
 #include "PEMovementComponent.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable, ClassGroup = (Custom), Category = "Project Elementus | Classes", EditInlineNew, meta = (BlueprintSpawnableComponent))
 class ELEMENTUSCORE_API UPEMovementComponent : public UCharacterMovementComponent
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	explicit UPEMovementComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEMovementComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

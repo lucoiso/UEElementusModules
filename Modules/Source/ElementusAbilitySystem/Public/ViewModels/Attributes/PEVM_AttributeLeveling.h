@@ -9,38 +9,38 @@
 #include "PEVM_AttributeLeveling.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPEVM_AttributeLeveling : public UPEVM_AttributeBase
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	explicit UPEVM_AttributeLeveling(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEVM_AttributeLeveling(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
-	float CurrentLevel;
+    UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
+    float CurrentLevel;
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
-	float CurrentExperience;
+    UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
+    float CurrentExperience;
 
-	UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
-	float RequiredExperience;
+    UPROPERTY(BlueprintReadWrite, FieldNotify, Setter, Getter, Category = "Project Elementus | Properties")
+    float RequiredExperience;
 
-	UFUNCTION(BlueprintPure, FieldNotify, Category = "Project Elementus | Functions")
-	float GetExperiencePercent() const;
+    UFUNCTION(BlueprintPure, FieldNotify, Category = "Project Elementus | Functions")
+    float GetExperiencePercent() const;
 
 protected:
-	virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue) override;
+    virtual void NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue) override;
 
 private:
-	void SetCurrentLevel(const float Value);
-	float GetCurrentLevel() const;
+    void SetCurrentLevel(const float Value);
+    float GetCurrentLevel() const;
 
-	void SetCurrentExperience(const float Value);
-	float GetCurrentExperience() const;
+    void SetCurrentExperience(const float Value);
+    float GetCurrentExperience() const;
 
-	void SetRequiredExperience(const float Value);
-	float GetRequiredExperience() const;
+    void SetRequiredExperience(const float Value);
+    float GetRequiredExperience() const;
 };

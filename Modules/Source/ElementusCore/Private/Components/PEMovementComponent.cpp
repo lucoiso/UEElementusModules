@@ -8,6 +8,6 @@
 
 UPEMovementComponent::UPEMovementComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	PrimaryComponentTick.bCanEverTick = true;
-	PrimaryComponentTick.bStartWithTickEnabled = true;
+    PrimaryComponentTick.bCanEverTick = true;
+    PrimaryComponentTick.bStartWithTickEnabled = true;
 }

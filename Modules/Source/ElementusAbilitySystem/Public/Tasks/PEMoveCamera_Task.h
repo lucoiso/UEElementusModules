@@ -10,53 +10,53 @@
 
 class UCameraComponent;
 class UTimelineComponent;
-	
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAimDelegate);
 /**
- * 
+ *
  */
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPEMoveCamera_Task final : public UAbilityTask
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEMoveCamera_Task(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEMoveCamera_Task(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	/* Create a reference to manage this ability task */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "true"))
-	static UPEMoveCamera_Task* MoveCamera(UGameplayAbility* OwningAbility, const FName TaskInstanceName, const FVector CameraRelativeTargetPosition, const float CameraLerpTime = 0.25f);
+    /* Create a reference to manage this ability task */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "true"))
+    static UPEMoveCamera_Task* MoveCamera(UGameplayAbility* OwningAbility, const FName TaskInstanceName, const FVector CameraRelativeTargetPosition, const float CameraLerpTime = 0.25f);
 
-	UPROPERTY(BlueprintAssignable)
-	FAimDelegate OnMoveCompleted;
+    UPROPERTY(BlueprintAssignable)
+    FAimDelegate OnMoveCompleted;
 
-	UPROPERTY(BlueprintAssignable)
-	FAimDelegate OnReversionCompleted;
-	
-	UPROPERTY(BlueprintAssignable)
-	FAimDelegate OnFailed;
+    UPROPERTY(BlueprintAssignable)
+    FAimDelegate OnReversionCompleted;
 
-	/* Revert the camera movement: Set camera location to initial position defined by APECharacter::GetCameraDefaultPosition() */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void RevertCameraPosition();
-	
-	virtual void Activate() override;
-	virtual void OnDestroy(const bool AbilityIsEnding) override;
+    UPROPERTY(BlueprintAssignable)
+    FAimDelegate OnFailed;
+
+    /* Revert the camera movement: Set camera location to initial position defined by APECharacter::GetCameraDefaultPosition() */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void RevertCameraPosition();
+
+    virtual void Activate() override;
+    virtual void OnDestroy(const bool AbilityIsEnding) override;
 
 private:
-	FVector CameraInitialPosition;
-	FVector CameraTargetPosition;
-	float CameraLerpTime;
+    FVector CameraInitialPosition;
+    FVector CameraTargetPosition;
+    float CameraLerpTime;
 
-	float CurrentValue = 0.f;
+    float CurrentValue = 0.f;
 
-	TWeakObjectPtr<UCameraComponent> TargetCamera;
-	TWeakObjectPtr<UTimelineComponent> TaskTimeline;
+    TWeakObjectPtr<UCameraComponent> TargetCamera;
+    TWeakObjectPtr<UTimelineComponent> TaskTimeline;
 
 protected:
-	UFUNCTION()
-	virtual void TimelineProgress(const float InValue);
-	
-	UFUNCTION()
-	virtual void TimelineFinished();
+    UFUNCTION()
+    virtual void TimelineProgress(const float InValue);
+
+    UFUNCTION()
+    virtual void TimelineFinished();
 };

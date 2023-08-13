@@ -15,13 +15,13 @@ UPEVM_AttributeBase::UPEVM_AttributeBase(const FObjectInitializer& ObjectInitial
 }
 
 void UPEVM_AttributeBase::NotifyAttributeChange(const FGameplayAttribute& Attribute, const float& NewValue)
-{	
+{
 }
 
 #if UE_WITH_IRIS
 void UPEVM_AttributeBase::RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags)
 {
-	Super::RegisterReplicationFragments(Context, RegistrationFlags);
-	UE::Net::FReplicationFragmentUtil::CreateAndRegisterFragmentsForObject(this, Context, RegistrationFlags);
+    Super::RegisterReplicationFragments(Context, RegistrationFlags);
+    UE::Net::FReplicationFragmentUtil::CreateAndRegisterFragmentsForObject(this, Context, RegistrationFlags);
 }
 #endif // UE_WITH_IRIS

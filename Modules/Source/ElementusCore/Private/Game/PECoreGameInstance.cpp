@@ -14,35 +14,35 @@ UPECoreGameInstance::UPECoreGameInstance(const FObjectInitializer& ObjectInitial
 
 void UPECoreGameInstance::Init()
 {
-	Super::Init();
-	
-	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UPECoreGameInstance::OnMapLoadingStart);
-	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UPECoreGameInstance::OnMapLoadingComplete);
+    Super::Init();
+
+    FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UPECoreGameInstance::OnMapLoadingStart);
+    FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UPECoreGameInstance::OnMapLoadingComplete);
 }
 
 void UPECoreGameInstance::OnMapLoadingStart(const FString& MapName)
 {
-	if (IsRunningDedicatedServer())
-	{
-		return;
-	}
-	
-	UE_LOG(LogElementusCore, Display, TEXT("%s - Loading map: %s"), *FString(__func__), *MapName);
+    if (IsRunningDedicatedServer())
+    {
+        return;
+    }
 
-	FLoadingScreenAttributes LoadingScreen;
-	LoadingScreen.bAllowEngineTick = false;
-	LoadingScreen.bAllowInEarlyStartup = true;
-	LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
-	LoadingScreen.bMoviesAreSkippable = false;
-	LoadingScreen.bWaitForManualStop = false;
-	LoadingScreen.MinimumLoadingScreenDisplayTime = -1.f;
-	LoadingScreen.PlaybackType = EMoviePlaybackType::MT_Normal;
-	LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+    UE_LOG(LogElementusCore, Display, TEXT("%s - Loading map: %s"), *FString(__func__), *MapName);
 
-	GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+    FLoadingScreenAttributes LoadingScreen;
+    LoadingScreen.bAllowEngineTick = false;
+    LoadingScreen.bAllowInEarlyStartup = true;
+    LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+    LoadingScreen.bMoviesAreSkippable = false;
+    LoadingScreen.bWaitForManualStop = false;
+    LoadingScreen.MinimumLoadingScreenDisplayTime = -1.f;
+    LoadingScreen.PlaybackType = EMoviePlaybackType::MT_Normal;
+    LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+
+    GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
 }
 
 void UPECoreGameInstance::OnMapLoadingComplete(UWorld* InLoadedWorld)
 {
-	UE_LOG(LogElementusCore, Display, TEXT("%s - Map Loaded: %s"), *FString(__func__), *InLoadedWorld->GetMapName());
+    UE_LOG(LogElementusCore, Display, TEXT("%s - Map Loaded: %s"), *FString(__func__), *InLoadedWorld->GetMapName());
 }

@@ -6,29 +6,29 @@ using UnrealBuildTool;
 
 public class ElementusActors : ModuleRules
 {
-	public ElementusActors(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		CppStandard = CppStandardVersion.Cpp17;
+    public ElementusActors(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        CppStandard = CppStandardVersion.Cpp17;
 
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"Core",
-			"GameplayTags"
-		});
+        PublicDependencyModuleNames.AddRange(new[]
+        {
+            "Core",
+            "GameplayTags"
+        });
 
-		PrivateDependencyModuleNames.AddRange(new[]
-		{
-			"Engine",
-			"NetCore",
-			"CoreUObject",
-			"Niagara",
-			"ElementusCommon",
-			"ElementusAbilitySystem",
-			"GameplayAbilities",
-			"DeveloperSettings"
-		});
+        PrivateDependencyModuleNames.AddRange(new[]
+        {
+            "Engine",
+            "NetCore",
+            "CoreUObject",
+            "Niagara",
+            "ElementusCommon",
+            "ElementusAbilitySystem",
+            "GameplayAbilities",
+            "DeveloperSettings"
+        });
 
-		SetupIrisSupport(Target);
-	}
+        SetupIrisSupport(Target);
+    }
 }
