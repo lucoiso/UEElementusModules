@@ -14,8 +14,8 @@
 UCLASS(MinimalAPI, Category = "Project Elementus | Classes")
 class UPEAssetManager : public UAssetManager
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	virtual void StartInitialLoading() override;
+    virtual void StartInitialLoading() override;
 };

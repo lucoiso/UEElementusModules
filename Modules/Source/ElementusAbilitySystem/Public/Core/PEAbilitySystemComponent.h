@@ -17,25 +17,25 @@ class UPEVM_AttributeBase;
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPEAbilitySystemComponent : public UAbilitySystemComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEAbilitySystemComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEAbilitySystemComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	/* Apply a grouped GE data to self Ability System Component */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void ApplyEffectGroupedDataToSelf(const FGameplayEffectGroupedData GroupedData);
+    /* Apply a grouped GE data to self Ability System Component */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void ApplyEffectGroupedDataToSelf(const FGameplayEffectGroupedData GroupedData);
 
-	/* Apply a grouped GE data to target Ability System Component */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void ApplyEffectGroupedDataToTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* TargetABSC);
+    /* Apply a grouped GE data to target Ability System Component */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void ApplyEffectGroupedDataToTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* TargetABSC);
 
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void RemoveEffectGroupedDataFromSelf(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, const int32 StacksToRemove = 1);
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void RemoveEffectGroupedDataFromSelf(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, const int32 StacksToRemove = 1);
 
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void RemoveEffectGroupedDataFromTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, UAbilitySystemComponent* TargetABSC, const int32 StacksToRemove = 1);
-		
-	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
-	virtual void ResetAbilitySystemComponent();
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void RemoveEffectGroupedDataFromTarget(const FGameplayEffectGroupedData GroupedData, UAbilitySystemComponent* InstigatorABSC, UAbilitySystemComponent* TargetABSC, const int32 StacksToRemove = 1);
+
+    virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
+    virtual void ResetAbilitySystemComponent();
 };

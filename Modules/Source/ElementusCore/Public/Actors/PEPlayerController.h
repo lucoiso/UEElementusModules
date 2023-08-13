@@ -37,16 +37,16 @@ struct FPrimaryElementusItemId;
 USTRUCT()
 struct FPendingAbilityInputData
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	FPendingAbilityInputData() = default;
-	FPendingAbilityInputData(UInputAction* InAction, const int32 InInputID) : Action(InAction), InputID(InInputID) {}
+    FPendingAbilityInputData() = default;
+    FPendingAbilityInputData(UInputAction* InAction, const int32 InInputID) : Action(InAction), InputID(InInputID) {}
 
-	UPROPERTY()
-	TObjectPtr<UInputAction> Action;
+    UPROPERTY()
+    TObjectPtr<UInputAction> Action;
 
-	UPROPERTY()
-	int32 InputID = 0;
+    UPROPERTY()
+    int32 InputID = 0;
 };
 
 /**
@@ -55,87 +55,87 @@ struct FPendingAbilityInputData
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSCORE_API APEPlayerController : public APlayerController, public IMFEA_AbilityInputBinding, public IPEElementusInventoryProcessor, public IAbilitySystemInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APEPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APEPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 #pragma region IMFEA_AbilityInputBinding
-	/* This function came from IMFEA_AbilityInputBinding interface,
-	 * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
-	virtual void SetupAbilityBindingByInput_Implementation(UInputAction* Action, const int32 InputID) override;
+    /* This function came from IMFEA_AbilityInputBinding interface,
+     * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
+    virtual void SetupAbilityBindingByInput_Implementation(UInputAction* Action, const int32 InputID) override;
 
-	/* This function came from IMFEA_AbilityInputBinding interface,
-	 * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
-	virtual void RemoveAbilityInputBinding_Implementation(const UInputAction* Action) override;
+    /* This function came from IMFEA_AbilityInputBinding interface,
+     * provided by GameFeatures_ExtraActions plugin to manage ability bindings */
+    virtual void RemoveAbilityInputBinding_Implementation(const UInputAction* Action) override;
 #pragma endregion IMFEA_AbilityInputBinding
 
-	/* Setup the spectating state on both client and server */
-	UFUNCTION(NetMulticast, Unreliable)
-	void SetupControllerSpectator();
+    /* Setup the spectating state on both client and server */
+    UFUNCTION(NetMulticast, Unreliable)
+    void SetupControllerSpectator();
 
-	/* Will respawn the character if the player is in spectating state */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	void InitializeRespawn(const float InSeconds);
+    /* Will respawn the character if the player is in spectating state */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    void InitializeRespawn(const float InSeconds);
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 protected:
-	virtual void SetupInputComponent() override;
+    virtual void SetupInputComponent() override;
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	/* Perform the respawn task on server */
-	UFUNCTION(Server, Reliable)
-	void RespawnAndPossess();
+    /* Perform the respawn task on server */
+    UFUNCTION(Server, Reliable)
+    void RespawnAndPossess();
 
 private:
-	struct FAbilityInputData
-	{
-		uint32 OnPressedHandle = 0;
-		uint32 OnReleasedHandle = 0;
-		uint32 InputID = 0;
-	};
+    struct FAbilityInputData
+    {
+        uint32 OnPressedHandle = 0;
+        uint32 OnReleasedHandle = 0;
+        uint32 InputID = 0;
+    };
 
-	TWeakObjectPtr<UEnum> InputEnumHandle;
-	TMap<TObjectPtr<UInputAction>, FAbilityInputData> AbilityActionBindings;
+    TWeakObjectPtr<UEnum> InputEnumHandle;
+    TMap<TObjectPtr<UInputAction>, FAbilityInputData> AbilityActionBindings;
 
-	virtual void ProcessAbilityInputAddition(UInputAction* Action, const int32 InputID);
-	virtual void ProcessAbilityInputRemoval(const UInputAction* Action);
+    virtual void ProcessAbilityInputAddition(UInputAction* Action, const int32 InputID);
+    virtual void ProcessAbilityInputRemoval(const UInputAction* Action);
 
-	UFUNCTION()
-	void OnRep_AbilityInputAddQueue();
+    UFUNCTION()
+    void OnRep_AbilityInputAddQueue();
 
-	UPROPERTY(ReplicatedUsing=OnRep_AbilityInputAddQueue)
-	TArray<FPendingAbilityInputData> AbilityInputAddQueue;
+    UPROPERTY(ReplicatedUsing = OnRep_AbilityInputAddQueue)
+    TArray<FPendingAbilityInputData> AbilityInputAddQueue;
 
-	UFUNCTION()
-	void OnRep_AbilityInputRemoveQueue();
+    UFUNCTION()
+    void OnRep_AbilityInputRemoveQueue();
 
-	UPROPERTY(ReplicatedUsing=OnRep_AbilityInputRemoveQueue)
-	TArray<TObjectPtr<const UInputAction>> AbilityInputRemoveQueue;
+    UPROPERTY(ReplicatedUsing = OnRep_AbilityInputRemoveQueue)
+    TArray<TObjectPtr<const UInputAction>> AbilityInputRemoveQueue;
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void OnAbilityInputPressed(UInputAction* SourceAction);
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void OnAbilityInputPressed(UInputAction* SourceAction);
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void OnAbilityInputReleased(UInputAction* SourceAction);
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void OnAbilityInputReleased(UInputAction* SourceAction);
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void ChangeCameraAxis(const FInputActionValue& Value);
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void ChangeCameraAxis(const FInputActionValue& Value);
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void Move(const FInputActionValue& Value) const;
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void Move(const FInputActionValue& Value) const;
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void Jump(const FInputActionValue& Value) const;
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void Jump(const FInputActionValue& Value) const;
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void SetVoiceChatEnabled(const FInputActionValue& Value) const;
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void SetVoiceChatEnabled(const FInputActionValue& Value) const;
 
-	UFUNCTION(Category = "Project Elementus | Input Binding")
-	void OpenInventory(const FInputActionValue& Value);
+    UFUNCTION(Category = "Project Elementus | Input Binding")
+    void OpenInventory(const FInputActionValue& Value);
 
-	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Project Elementus | Functions")
-	void Client_OpenInventory();
+    UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Project Elementus | Functions")
+    void Client_OpenInventory();
 };

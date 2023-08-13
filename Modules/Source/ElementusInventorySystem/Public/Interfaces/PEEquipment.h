@@ -17,23 +17,23 @@ class UGameplayAbility;
 UCLASS(Abstract, Blueprintable, Category = "Project Elementus | Classes")
 class ELEMENTUSINVENTORYSYSTEM_API UPEEquipment : public UObject
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEEquipment(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
-	UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties", Meta = (TitleProperty = "{EffectClass}"))
-	TArray<FGameplayEffectGroupedData> EquipmentEffects;
+    explicit UPEEquipment(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
-	FGameplayTagContainer EquipmentSlotTags;
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties", Meta = (TitleProperty = "{EffectClass}"))
+    TArray<FGameplayEffectGroupedData> EquipmentEffects;
 
-	UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
-	TMap<FName, TSubclassOf<UGameplayAbility>> EquipmentAbilities;
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
+    FGameplayTagContainer EquipmentSlotTags;
 
-	UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
-	TSoftObjectPtr<USkeletalMesh> EquipmentMesh;
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
+    TMap<FName, TSubclassOf<UGameplayAbility>> EquipmentAbilities;
 
-	UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
-	FName SocketToAttach = NAME_None;
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
+    TSoftObjectPtr<USkeletalMesh> EquipmentMesh;
+
+    UPROPERTY(EditAnywhere, Category = "Project Elementus | Properties")
+    FName SocketToAttach = NAME_None;
 };

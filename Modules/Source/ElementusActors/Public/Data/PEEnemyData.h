@@ -14,16 +14,16 @@
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSACTORS_API UPEEnemyData final : public UPrimaryDataAsset
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEEnemyData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEEnemyData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override
-	{
-		return FPrimaryAssetId(TEXT("PE_EnemyData"), *("Enemy_" + FString::FromInt(EnemyId)));
-	}
+    FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override
+    {
+        return FPrimaryAssetId(TEXT("PE_EnemyData"), *("Enemy_" + FString::FromInt(EnemyId)));
+    }
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Data"))
-	int32 EnemyId;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Data"))
+    int32 EnemyId;
 };

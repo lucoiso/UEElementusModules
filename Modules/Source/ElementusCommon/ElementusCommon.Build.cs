@@ -6,23 +6,23 @@ using UnrealBuildTool;
 
 public class ElementusCommon : ModuleRules
 {
-	public ElementusCommon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		CppStandard = CppStandardVersion.Cpp17;
+    public ElementusCommon(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        CppStandard = CppStandardVersion.Cpp17;
 
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"Core"
-		});
+        PublicDependencyModuleNames.AddRange(new[]
+        {
+            "Core"
+        });
 
-		PrivateDependencyModuleNames.AddRange(new[]
-		{
-			"Engine",
-			"CoreUObject",
-			"DeveloperSettings"
-		});
+        PrivateDependencyModuleNames.AddRange(new[]
+        {
+            "Engine",
+            "CoreUObject",
+            "DeveloperSettings"
+        });
 
-		SetupIrisSupport(Target);
-	}
+        SetupIrisSupport(Target);
+    }
 }

@@ -17,28 +17,28 @@ class UNiagaraSystem;
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSACTORS_API UPEConsumableData final : public UPrimaryDataAsset
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEConsumableData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEConsumableData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override
-	{
-		return FPrimaryAssetId(TEXT("PE_ConsumableData"), *("Consumable_" + FString::FromInt(ConsumableId)));
-	}
+    FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override
+    {
+        return FPrimaryAssetId(TEXT("PE_ConsumableData"), *("Consumable_" + FString::FromInt(ConsumableId)));
+    }
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Data"))
-	int32 ConsumableId;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Data"))
+    int32 ConsumableId;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "SoftData"))
-	TSoftObjectPtr<UStaticMesh> ObjectMesh;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "SoftData"))
+    TSoftObjectPtr<UStaticMesh> ObjectMesh;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "SoftData"))
-	TSoftObjectPtr<UNiagaraSystem> ObjectVFX;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "SoftData"))
+    TSoftObjectPtr<UNiagaraSystem> ObjectVFX;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Gameplay", TitleProperty = "{EffectClass}"))
-	TArray<FGameplayEffectGroupedData> ConsumableEffects;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Gameplay", TitleProperty = "{EffectClass}"))
+    TArray<FGameplayEffectGroupedData> ConsumableEffects;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Gameplay"))
-	FGameplayTagContainer RequirementsTags;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Project Elementus", meta = (AssetBundles = "Gameplay"))
+    FGameplayTagContainer RequirementsTags;
 };

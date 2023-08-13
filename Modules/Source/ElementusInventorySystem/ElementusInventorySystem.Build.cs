@@ -6,32 +6,32 @@ using UnrealBuildTool;
 
 public class ElementusInventorySystem : ModuleRules
 {
-	public ElementusInventorySystem(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		CppStandard = CppStandardVersion.Cpp17;
+    public ElementusInventorySystem(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        CppStandard = CppStandardVersion.Cpp17;
 
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"Core"
-		});
+        PublicDependencyModuleNames.AddRange(new[]
+        {
+            "Core"
+        });
 
-		PrivateDependencyModuleNames.AddRange(new[]
-		{
-			"Engine",
-			"NetCore",
-			"CoreUObject",
-			"GameplayAbilities",
-			"GameplayTasks",
-			"GameplayTags",
-			"ElementusInventory",
-			"ElementusAbilitySystem",
-			"ElementusCommon",
-			"DeveloperSettings",
-			"ModularFeatures_ExtraActions",
-			"UMG"
-		});
+        PrivateDependencyModuleNames.AddRange(new[]
+        {
+            "Engine",
+            "NetCore",
+            "CoreUObject",
+            "GameplayAbilities",
+            "GameplayTasks",
+            "GameplayTags",
+            "ElementusInventory",
+            "ElementusAbilitySystem",
+            "ElementusCommon",
+            "DeveloperSettings",
+            "ModularFeatures_ExtraActions",
+            "UMG"
+        });
 
-		SetupIrisSupport(Target);
-	}
+        SetupIrisSupport(Target);
+    }
 }

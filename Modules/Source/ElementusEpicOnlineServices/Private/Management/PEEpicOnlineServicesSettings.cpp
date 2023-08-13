@@ -9,36 +9,36 @@
 
 UPEEpicOnlineServicesSettings::UPEEpicOnlineServicesSettings(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), bEnableInternalLogs(false)
 {
-	CategoryName = TEXT("Plugins");
+    CategoryName = TEXT("Plugins");
 }
 
 const UPEEpicOnlineServicesSettings* UPEEpicOnlineServicesSettings::Get()
 {
-	static const UPEEpicOnlineServicesSettings* const Instance = GetDefault<UPEEpicOnlineServicesSettings>();
-	return Instance;
+    static const UPEEpicOnlineServicesSettings* const Instance = GetDefault<UPEEpicOnlineServicesSettings>();
+    return Instance;
 }
 
 #if WITH_EDITOR
 void UPEEpicOnlineServicesSettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	Super::PostEditChangeProperty(PropertyChangedEvent);
+    Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPEEpicOnlineServicesSettings, bEnableInternalLogs))
-	{
-		ToggleInternalLogs();
-	}
+    if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPEEpicOnlineServicesSettings, bEnableInternalLogs))
+    {
+        ToggleInternalLogs();
+    }
 }
 #endif
 
 void UPEEpicOnlineServicesSettings::PostInitProperties()
 {
-	Super::PostInitProperties();
-	ToggleInternalLogs();
+    Super::PostInitProperties();
+    ToggleInternalLogs();
 }
 
 void UPEEpicOnlineServicesSettings::ToggleInternalLogs()
 {
 #if !UE_BUILD_SHIPPING
-	LogElementusEpicOnlineServices_Internal.SetVerbosity(bEnableInternalLogs ? ELogVerbosity::Display : ELogVerbosity::NoLogging);
+    LogElementusEpicOnlineServices_Internal.SetVerbosity(bEnableInternalLogs ? ELogVerbosity::Display : ELogVerbosity::NoLogging);
 #endif
 }

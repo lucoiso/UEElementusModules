@@ -14,8 +14,8 @@
 UCLASS(Abstract, Blueprintable, Category = "Project Elementus | Classes")
 class ELEMENTUSACTORS_API APEResourceActor : public AActor
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APEResourceActor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APEResourceActor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

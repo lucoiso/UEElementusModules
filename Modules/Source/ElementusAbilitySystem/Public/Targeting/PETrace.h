@@ -16,38 +16,38 @@
 USTRUCT(BlueprintType, Category = "Project Elementus | Structs")
 struct ELEMENTUSABILITYSYSTEM_API FPETargetActorSpawnParams
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	FPETargetActorSpawnParams() : Range(0.f), Height(0.f), Radius(0.f), StartLocation(FGameplayAbilityTargetingLocationInfo()), ReticleClass(AGameplayAbilityWorldReticle::StaticClass()), ReticleParams(FWorldReticleParameters()), TargetFilter(FGameplayTargetDataFilter()), bDestroyOnConfirmation(false), bTraceAffectsAimPitch(false), bDebug(false)
-	{
-	}
+    FPETargetActorSpawnParams() : Range(0.f), Height(0.f), Radius(0.f), StartLocation(FGameplayAbilityTargetingLocationInfo()), ReticleClass(AGameplayAbilityWorldReticle::StaticClass()), ReticleParams(FWorldReticleParameters()), TargetFilter(FGameplayTargetDataFilter()), bDestroyOnConfirmation(false), bTraceAffectsAimPitch(false), bDebug(false)
+    {
+    }
 
-	float Range;
+    float Range;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	float Height;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    float Height;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	float Radius;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    float Radius;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	FGameplayAbilityTargetingLocationInfo StartLocation;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    FGameplayAbilityTargetingLocationInfo StartLocation;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	TSubclassOf<AGameplayAbilityWorldReticle> ReticleClass;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    TSubclassOf<AGameplayAbilityWorldReticle> ReticleClass;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	FWorldReticleParameters ReticleParams;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    FWorldReticleParameters ReticleParams;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	FGameplayTargetDataFilter TargetFilter;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    FGameplayTargetDataFilter TargetFilter;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	bool bDestroyOnConfirmation;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    bool bDestroyOnConfirmation;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	bool bTraceAffectsAimPitch;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    bool bTraceAffectsAimPitch;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
-	bool bDebug;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Project Elementus | Properties")
+    bool bDebug;
 };

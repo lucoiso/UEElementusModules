@@ -12,12 +12,12 @@
 
 APEGameMode::APEGameMode(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), bCanRespawn(true)
 {
-	if (const UPECoreSettings* const ProjectSettings = UPECoreSettings::Get(); !ProjectSettings->CharacterPawn.IsNull())
-	{
-		DefaultPawnClass = ProjectSettings->CharacterPawn.LoadSynchronous();
-	}
+    if (const UPECoreSettings* const ProjectSettings = UPECoreSettings::Get(); !ProjectSettings->CharacterPawn.IsNull())
+    {
+        DefaultPawnClass = ProjectSettings->CharacterPawn.LoadSynchronous();
+    }
 
-	PlayerStateClass = APEPlayerState::StaticClass();
-	PlayerControllerClass = APEPlayerController::StaticClass();
-	HUDClass = APEHUD::StaticClass();
+    PlayerStateClass = APEPlayerState::StaticClass();
+    PlayerControllerClass = APEPlayerController::StaticClass();
+    HUDClass = APEHUD::StaticClass();
 }

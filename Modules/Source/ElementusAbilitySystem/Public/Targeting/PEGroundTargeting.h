@@ -9,13 +9,13 @@
 #include "PEGroundTargeting.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API APEGroundTargeting : public AGameplayAbilityTargetActor_GroundTrace
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit APEGroundTargeting(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit APEGroundTargeting(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

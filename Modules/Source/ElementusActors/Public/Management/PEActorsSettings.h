@@ -9,28 +9,28 @@
 #include "PEActorsSettings.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Config = Plugins, DefaultConfig, Meta = (DisplayName = "Elementus Module: Actors"))
 class ELEMENTUSACTORS_API UPEActorsSettings : public UDeveloperSettings
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEActorsSettings(const FObjectInitializer& ObjectInitializer);
-	static const UPEActorsSettings* Get();
+    explicit UPEActorsSettings(const FObjectInitializer& ObjectInitializer);
+    static const UPEActorsSettings* Get();
 
-	/* Will print extra internal informations in log */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Internal Logs"))
-	bool bEnableInternalLogs;
+    /* Will print extra internal informations in log */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Internal Logs"))
+    bool bEnableInternalLogs;
 
 protected:
 #if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
-	virtual void PostInitProperties() override;
+    virtual void PostInitProperties() override;
 
 private:
-	void ToggleInternalLogs();
+    void ToggleInternalLogs();
 };

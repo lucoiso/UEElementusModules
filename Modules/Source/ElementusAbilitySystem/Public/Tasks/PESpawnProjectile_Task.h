@@ -19,26 +19,26 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSpawnProjectileDelegate, APEAbility
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPESpawnProjectile_Task final : public UAbilityTask
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPESpawnProjectile_Task(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPESpawnProjectile_Task(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	/* Create a reference to manage this ability task */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "true"))
-	static UPESpawnProjectile_Task* SpawnProjectile(UGameplayAbility* OwningAbility, const FName TaskInstanceName, TSubclassOf<APEAbilityProjectile> ClassToSpawn, const FTransform SpawnTransform, const FVector DirectionToFire, const TArray<FGameplayEffectGroupedData> EffectDataArray);
+    /* Create a reference to manage this ability task */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "true"))
+    static UPESpawnProjectile_Task* SpawnProjectile(UGameplayAbility* OwningAbility, const FName TaskInstanceName, TSubclassOf<APEAbilityProjectile> ClassToSpawn, const FTransform SpawnTransform, const FVector DirectionToFire, const TArray<FGameplayEffectGroupedData> EffectDataArray);
 
-	virtual void Activate() override;
+    virtual void Activate() override;
 
-	UPROPERTY(BlueprintAssignable, Category = "Project Elementus | Delegates")
-	FSpawnProjectileDelegate OnProjectileSpawn;
+    UPROPERTY(BlueprintAssignable, Category = "Project Elementus | Delegates")
+    FSpawnProjectileDelegate OnProjectileSpawn;
 
-	UPROPERTY(BlueprintAssignable, Category = "Project Elementus | Delegates")
-	FSpawnProjectileDelegate OnSpawnFailed;
+    UPROPERTY(BlueprintAssignable, Category = "Project Elementus | Delegates")
+    FSpawnProjectileDelegate OnSpawnFailed;
 
 protected:
-	FTransform ProjectileTransform;
-	FVector ProjectileFireDirection;
-	TSubclassOf<APEAbilityProjectile> ProjectileClass;
-	TArray<FGameplayEffectGroupedData> ProjectileEffectArr;
+    FTransform ProjectileTransform;
+    FVector ProjectileFireDirection;
+    TSubclassOf<APEAbilityProjectile> ProjectileClass;
+    TArray<FGameplayEffectGroupedData> ProjectileEffectArr;
 };

@@ -9,36 +9,36 @@
 
 UPEActorsSettings::UPEActorsSettings(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), bEnableInternalLogs(false)
 {
-	CategoryName = TEXT("Plugins");
+    CategoryName = TEXT("Plugins");
 }
 
 const UPEActorsSettings* UPEActorsSettings::Get()
 {
-	static const UPEActorsSettings* const Instance = GetDefault<UPEActorsSettings>();
-	return Instance;
+    static const UPEActorsSettings* const Instance = GetDefault<UPEActorsSettings>();
+    return Instance;
 }
 
 #if WITH_EDITOR
 void UPEActorsSettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	Super::PostEditChangeProperty(PropertyChangedEvent);
+    Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPEActorsSettings, bEnableInternalLogs))
-	{
-		ToggleInternalLogs();
-	}
+    if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPEActorsSettings, bEnableInternalLogs))
+    {
+        ToggleInternalLogs();
+    }
 }
 #endif
 
 void UPEActorsSettings::PostInitProperties()
 {
-	Super::PostInitProperties();
-	ToggleInternalLogs();
+    Super::PostInitProperties();
+    ToggleInternalLogs();
 }
 
 void UPEActorsSettings::ToggleInternalLogs()
 {
 #if !UE_BUILD_SHIPPING
-	LogElementusActors_Internal.SetVerbosity(bEnableInternalLogs ? ELogVerbosity::Display : ELogVerbosity::NoLogging);
+    LogElementusActors_Internal.SetVerbosity(bEnableInternalLogs ? ELogVerbosity::Display : ELogVerbosity::NoLogging);
 #endif
 }

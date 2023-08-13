@@ -21,17 +21,17 @@
 UCLASS(Abstract, NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPEAttributeBase : public UAttributeSet
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEAttributeBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEAttributeBase(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 protected:
-	virtual void InitFromMetaDataTable(const UDataTable* DataTable);
+    virtual void InitFromMetaDataTable(const UDataTable* DataTable);
 
-	template<typename ComponentTy>
-	ComponentTy* GetCastedAbilitySystemComponent()
-	{
-		return Cast<ComponentTy>(GetOwningAbilitySystemComponent());
-	}
+    template<typename ComponentTy>
+    ComponentTy* GetCastedAbilitySystemComponent()
+    {
+        return Cast<ComponentTy>(GetOwningAbilitySystemComponent());
+    }
 };

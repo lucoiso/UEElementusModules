@@ -9,28 +9,28 @@
 #include "PECommonSettings.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Config = Plugins, DefaultConfig, Meta = (DisplayName = "Elementus Module: Common"))
 class ELEMENTUSCOMMON_API UPECommonSettings : public UDeveloperSettings
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPECommonSettings(const FObjectInitializer& ObjectInitializer);
-	static const UPECommonSettings* Get();
+    explicit UPECommonSettings(const FObjectInitializer& ObjectInitializer);
+    static const UPECommonSettings* Get();
 
-	/* Will print extra internal informations in log */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Internal Logs"))
-	bool bEnableInternalLogs;
+    /* Will print extra internal informations in log */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = "Settings", Meta = (DisplayName = "Enable Internal Logs"))
+    bool bEnableInternalLogs;
 
 protected:
 #if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
-	virtual void PostInitProperties() override;
+    virtual void PostInitProperties() override;
 
 private:
-	void ToggleInternalLogs();
+    void ToggleInternalLogs();
 };

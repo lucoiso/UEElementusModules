@@ -14,10 +14,10 @@
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPEDamageGEC final : public UGameplayEffectExecutionCalculation
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPEDamageGEC(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPEDamageGEC(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
+    virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 };

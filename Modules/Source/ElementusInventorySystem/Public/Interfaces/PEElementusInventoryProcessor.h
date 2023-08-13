@@ -19,7 +19,7 @@ class UPEInventoryComponent;
 UINTERFACE(NotBlueprintable, Category = "Project Elementus | Interfaces")
 class ELEMENTUSINVENTORYSYSTEM_API UPEElementusInventoryProcessor : public UInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 };
 
 /**
@@ -27,20 +27,20 @@ class ELEMENTUSINVENTORYSYSTEM_API UPEElementusInventoryProcessor : public UInte
  */
 class ELEMENTUSINVENTORYSYSTEM_API IPEElementusInventoryProcessor
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	/* This function will perform the interaction behavior */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	virtual void ProcessTrade(const TArray<FElementusItemInfo>& TradeInfo, UElementusInventoryComponent* OtherComponent = nullptr, const bool bIsFromPlayer = false);
+    /* This function will perform the interaction behavior */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    virtual void ProcessTrade(const TArray<FElementusItemInfo>& TradeInfo, UElementusInventoryComponent* OtherComponent = nullptr, const bool bIsFromPlayer = false);
 
-	/* Set if the actor is focusing or not the interactable object */
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	virtual void ProcessGameplayEffect(const TSubclassOf<UGameplayEffect>& EffectClass);
+    /* Set if the actor is focusing or not the interactable object */
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    virtual void ProcessGameplayEffect(const TSubclassOf<UGameplayEffect>& EffectClass);
 
-	UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
-	virtual UPEInventoryComponent* GetCastedInventoryComponent() const;
+    UFUNCTION(BlueprintCallable, Category = "Project Elementus | Functions")
+    virtual UPEInventoryComponent* GetCastedInventoryComponent() const;
 
 private:
-	virtual APlayerController* GetOwningController() const;
+    virtual APlayerController* GetOwningController() const;
 };

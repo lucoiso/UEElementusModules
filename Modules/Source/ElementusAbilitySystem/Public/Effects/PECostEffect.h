@@ -9,13 +9,13 @@
 #include "PECostEffect.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPECostEffect : public UGameplayEffect
 {
-	GENERATED_BODY()
-		
+    GENERATED_BODY()
+
 public:
-	explicit UPECostEffect(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPECostEffect(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

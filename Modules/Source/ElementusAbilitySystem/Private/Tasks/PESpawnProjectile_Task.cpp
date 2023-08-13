@@ -11,56 +11,56 @@
 
 UPESpawnProjectile_Task::UPESpawnProjectile_Task(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	bTickingTask = false;
+    bTickingTask = false;
 }
 
 UPESpawnProjectile_Task* UPESpawnProjectile_Task::SpawnProjectile(UGameplayAbility* OwningAbility, const FName TaskInstanceName, const TSubclassOf<APEAbilityProjectile> ClassToSpawn, const FTransform SpawnTransform, const FVector DirectionToFire, const TArray<FGameplayEffectGroupedData> EffectDataArray)
 {
-	UPESpawnProjectile_Task* const MyObj = NewAbilityTask<UPESpawnProjectile_Task>(OwningAbility, TaskInstanceName);
-	MyObj->ProjectileClass = ClassToSpawn;
-	MyObj->ProjectileTransform = SpawnTransform;
-	MyObj->ProjectileFireDirection = DirectionToFire;
-	MyObj->ProjectileEffectArr = EffectDataArray;
+    UPESpawnProjectile_Task* const MyObj = NewAbilityTask<UPESpawnProjectile_Task>(OwningAbility, TaskInstanceName);
+    MyObj->ProjectileClass = ClassToSpawn;
+    MyObj->ProjectileTransform = SpawnTransform;
+    MyObj->ProjectileFireDirection = DirectionToFire;
+    MyObj->ProjectileEffectArr = EffectDataArray;
 
-	return MyObj;
+    return MyObj;
 }
 
 void UPESpawnProjectile_Task::Activate()
 {
-	Super::Activate();
-	check(Ability);
+    Super::Activate();
+    check(Ability);
 
-	// Only the server can spawn actors!
-	if (!Ability->GetActorInfo().IsNetAuthority())
-	{
-		EndTask();
-	}
+    // Only the server can spawn actors!
+    if (!Ability->GetActorInfo().IsNetAuthority())
+    {
+        EndTask();
+    }
 
-	if (ensureAlwaysMsgf(ProjectileClass != nullptr, TEXT("%s - Task %s failed to activate because projectile class is null"), *FString(__func__), *GetName()))
-	{
-		APEAbilityProjectile* const SpawnedProjectile = GetWorld()->SpawnActorDeferred<APEAbilityProjectile>(ProjectileClass, ProjectileTransform, GetOwnerActor(), nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+    if (ensureAlwaysMsgf(ProjectileClass != nullptr, TEXT("%s - Task %s failed to activate because projectile class is null"), *FString(__func__), *GetName()))
+    {
+        APEAbilityProjectile* const SpawnedProjectile = GetWorld()->SpawnActorDeferred<APEAbilityProjectile>(ProjectileClass, ProjectileTransform, GetOwnerActor(), nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-		SpawnedProjectile->ProjectileEffects = ProjectileEffectArr;
-		SpawnedProjectile->FinishSpawning(ProjectileTransform);
+        SpawnedProjectile->ProjectileEffects = ProjectileEffectArr;
+        SpawnedProjectile->FinishSpawning(ProjectileTransform);
 
-		if (IsValid(SpawnedProjectile))
-		{
-			SpawnedProjectile->FireInDirection(ProjectileFireDirection);
+        if (IsValid(SpawnedProjectile))
+        {
+            SpawnedProjectile->FireInDirection(ProjectileFireDirection);
 
-			if (ShouldBroadcastAbilityTaskDelegates())
-			{
-				OnProjectileSpawn.Broadcast(SpawnedProjectile);
-			}
-		}
-		else if (ShouldBroadcastAbilityTaskDelegates())
-		{
-			OnSpawnFailed.Broadcast(nullptr);
-		}
-	}
-	else if (ShouldBroadcastAbilityTaskDelegates())
-	{
-		OnSpawnFailed.Broadcast(nullptr);
-	}	
+            if (ShouldBroadcastAbilityTaskDelegates())
+            {
+                OnProjectileSpawn.Broadcast(SpawnedProjectile);
+            }
+        }
+        else if (ShouldBroadcastAbilityTaskDelegates())
+        {
+            OnSpawnFailed.Broadcast(nullptr);
+        }
+    }
+    else if (ShouldBroadcastAbilityTaskDelegates())
+    {
+        OnSpawnFailed.Broadcast(nullptr);
+    }
 
-	EndTask();
+    EndTask();
 }

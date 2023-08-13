@@ -14,35 +14,35 @@
 UCLASS(NotBlueprintable, NotPlaceable, Category = "Project Elementus | Classes")
 class ELEMENTUSABILITYSYSTEM_API UPELevelingAS final : public UPEAttributeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	explicit UPELevelingAS(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+    explicit UPELevelingAS(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 private:
-	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_CurrentLevel)
-	FGameplayAttributeData CurrentLevel;
-	ATTRIBUTE_ACCESSORS(UPELevelingAS, CurrentLevel)
+    UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_CurrentLevel)
+    FGameplayAttributeData CurrentLevel;
+    ATTRIBUTE_ACCESSORS(UPELevelingAS, CurrentLevel)
 
-	UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_CurrentExperience)
-	FGameplayAttributeData CurrentExperience;
-	ATTRIBUTE_ACCESSORS(UPELevelingAS, CurrentExperience)
+        UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_CurrentExperience)
+    FGameplayAttributeData CurrentExperience;
+    ATTRIBUTE_ACCESSORS(UPELevelingAS, CurrentExperience)
 
-	UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_RequiredExperience)
-	FGameplayAttributeData RequiredExperience;
-	ATTRIBUTE_ACCESSORS(UPELevelingAS, RequiredExperience)
+        UPROPERTY(BlueprintReadOnly, Category = "Project Elementus | Properties", ReplicatedUsing = OnRep_RequiredExperience)
+    FGameplayAttributeData RequiredExperience;
+    ATTRIBUTE_ACCESSORS(UPELevelingAS, RequiredExperience)
 
 protected:
-	UFUNCTION()
-	void OnRep_CurrentLevel(const FGameplayAttributeData& OldValue) const;
+    UFUNCTION()
+    void OnRep_CurrentLevel(const FGameplayAttributeData& OldValue) const;
 
-	UFUNCTION()
-	void OnRep_CurrentExperience(const FGameplayAttributeData& OldValue) const;
+    UFUNCTION()
+    void OnRep_CurrentExperience(const FGameplayAttributeData& OldValue) const;
 
-	UFUNCTION()
-	void OnRep_RequiredExperience(const FGameplayAttributeData& OldValue) const;
+    UFUNCTION()
+    void OnRep_RequiredExperience(const FGameplayAttributeData& OldValue) const;
 };
