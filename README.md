@@ -24,7 +24,7 @@ As a plugin, it is easier to organize, update and insert the content into alread
 * [FSR 1.0 (Custom):](https://github.com/lucoiso/UEFSR) Adapted version of the original AMD FSR 1.0 plugin for UE4 to properly work in Unreal Engine 5.
 
 ## Requirements
-* Unreal Engine 5.1+.
+* Unreal Engine 5.2+.
 * Visual Studio 2019 or 2022 with the module Game Development with C++.
 * Git w/ Git LFS.
 
