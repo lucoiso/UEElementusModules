@@ -91,7 +91,6 @@ void UPEAbilitySystemComponent::RemoveEffectGroupedDataFromSelf(const FGameplayE
         }
     );
 
-    bIsNetDirty = true;
     RemoveActiveEffects(Query, StacksToRemove);
 }
 
@@ -130,7 +129,6 @@ void UPEAbilitySystemComponent::RemoveEffectGroupedDataFromTarget(const FGamepla
         }
     );
 
-    bIsNetDirty = true;
     TargetABSC->RemoveActiveEffects(Query, StacksToRemove);
 }
 
