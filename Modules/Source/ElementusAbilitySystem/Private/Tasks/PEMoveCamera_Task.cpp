@@ -37,17 +37,17 @@ void UPEMoveCamera_Task::Activate()
     TaskTimeline = NewObject<UTimelineComponent>(GetAvatarActor(), UTimelineComponent::StaticClass(), TEXT("MoveCameraTimeline"));
     if (!TaskTimeline.IsValid())
     {
-        UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s ended on activation due to invalid timeline"), *FString(__func__), *GetName());
+        UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s ended on activation due to invalid timeline"), *FString(__FUNCTION__), *GetName());
         EndTask();
         return;
     }
 
-    if (ACharacter* const OwningCharacter = Cast<ACharacter>(Ability->GetAvatarActorFromActorInfo()); ensureAlwaysMsgf(IsValid(OwningCharacter), TEXT("%s - Task %s failed to activate because have a invalid owner"), *FString(__func__), *GetName()))
+    if (ACharacter* const OwningCharacter = Cast<ACharacter>(Ability->GetAvatarActorFromActorInfo()); ensureAlwaysMsgf(IsValid(OwningCharacter), TEXT("%s - Task %s failed to activate because have a invalid owner"), *FString(__FUNCTION__), *GetName()))
     {
         UActorComponent* const CameraComp = OwningCharacter->GetComponentByClass(UCameraComponent::StaticClass());
         if (!IsValid(CameraComp))
         {
-            UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s ended on activation due to invalid camera target"), *FString(__func__), *GetName());
+            UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s ended on activation due to invalid camera target"), *FString(__FUNCTION__), *GetName());
             EndTask();
             return;
         }
@@ -77,7 +77,7 @@ void UPEMoveCamera_Task::RevertCameraPosition()
 {
     if (!TaskTimeline.IsValid())
     {
-        UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s failed while trying to revert camera position due to invalid timeline"), *FString(__func__), *GetName());
+        UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s failed while trying to revert camera position due to invalid timeline"), *FString(__FUNCTION__), *GetName());
 
         OnFailed.Broadcast();
         EndTask();
@@ -92,7 +92,7 @@ void UPEMoveCamera_Task::OnDestroy(const bool AbilityIsEnding)
 {
     if (TaskTimeline.IsValid() && TaskTimeline->IsPlaying())
     {
-        UE_LOG(LogElementusAbilitySystem_Internal, Warning, TEXT("%s - Task %s ended while the timeline is playing!"), *FString(__func__), *GetName());
+        UE_LOG(LogElementusAbilitySystem_Internal, Warning, TEXT("%s - Task %s ended while the timeline is playing!"), *FString(__FUNCTION__), *GetName());
     }
 
     Super::OnDestroy(AbilityIsEnding);
@@ -104,7 +104,7 @@ void UPEMoveCamera_Task::TimelineProgress(const float InValue)
 
     if (!TargetCamera.IsValid())
     {
-        UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s failed while trying to change camera position due to invalid target camera"), *FString(__func__), *GetName());
+        UE_LOG(LogElementusAbilitySystem_Internal, Error, TEXT("%s - Task %s failed while trying to change camera position due to invalid target camera"), *FString(__FUNCTION__), *GetName());
 
         OnFailed.Broadcast();
 

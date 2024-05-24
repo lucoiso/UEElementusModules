@@ -10,9 +10,9 @@
 #include "PEVM_AttributeBase.generated.h"
 
 #define CHECK_ATTRIBUTE_AND_SET_VALUE(AttributeClass, AttributeName) \
-if (Attribute == ##AttributeClass##::Get##AttributeName##Attribute()) \
+if (Attribute == AttributeClass::Get##AttributeName##Attribute()) \
 { \
-	Set##AttributeName##(NewValue); \
+	Set##AttributeName(NewValue); \
 	return; \
 }
 

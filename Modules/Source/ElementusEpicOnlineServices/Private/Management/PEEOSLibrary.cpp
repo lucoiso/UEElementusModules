@@ -51,7 +51,7 @@ FEOSVoiceChatUser* UPEEOSLibrary::GetEOSVoiceChatUser(const uint8 LocalUserNum)
 
 void UPEEOSLibrary::MuteEOSSessionVoiceChatUser(const int32 LocalUserNum, const bool bMute)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Mute: %d"), *FString(__func__), LocalUserNum, bMute);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Mute: %d"), *FString(__FUNCTION__), LocalUserNum, bMute);
 
     if (FEOSVoiceChatUser* const VoiceChatUserPtr = GetEOSVoiceChatUser(LocalUserNum))
     {
@@ -147,7 +147,7 @@ void UPEEOSLibrary::IngestEOSStats(const int32 LocalUserNum, const TMap<FName, i
                 continue;
             }
 
-            UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Stat Name: %s; Value: %d"), *FString(__func__), LocalUserNum, *StatName.ToString(), StatValue);
+            UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Stat Name: %s; Value: %d"), *FString(__FUNCTION__), LocalUserNum, *StatName.ToString(), StatValue);
 
             const FOnlineStatUpdate StatUpdate(StatValue, FOnlineStatUpdate::EOnlineStatModificationType::Unknown);
             UpdatedStats.Stats.Add(StatName.ToString(), StatUpdate);
@@ -156,7 +156,7 @@ void UPEEOSLibrary::IngestEOSStats(const int32 LocalUserNum, const TMap<FName, i
         const FOnlineStatsUpdateStatsComplete UpdateStatsDelegate = FOnlineStatsUpdateStatsComplete::CreateLambda(
             [UserNetIdRef, FuncName = __func__](const FOnlineError& ResultState)
             {
-                UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - User ID: %s; Result: %s"), *FString(__func__), *UserNetIdRef->ToString(), *ResultState.ToLogString());
+                UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - User ID: %s; Result: %s"), *FString(__FUNCTION__), *UserNetIdRef->ToString(), *ResultState.ToLogString());
             }
         );
 

@@ -5,6 +5,7 @@
 #include "Actors/PECharacter.h"
 #include "Actors/PEAIController.h"
 #include "Actors/PEPlayerState.h"
+#include "LogElementusCore.h"
 #include "Components/PEMovementComponent.h"
 #include "Management/PECoreSettings.h"
 #include <Actors/PEInventoryPackage.h>
@@ -330,25 +331,25 @@ void APECharacter::AbilityFailed_Implementation(const UGameplayAbility* Ability,
 #if WITH_EDITOR
     if (bDebugAbilities)
     {
-        ABILITY_VLOG(Ability, Warning, TEXT("Ability %s failed to activate. Owner: %s"), *Ability->GetName(), *GetName());
+        UE_VLOG(Ability, LogElementusCore, Warning, TEXT("Ability %s failed to activate. Owner: %s"), *Ability->GetName(), *GetName());
 
         if (!TagContainer.IsEmpty())
         {
-            ABILITY_VLOG(Ability, Warning, TEXT("Reasons:"));
+            UE_VLOG(Ability, LogElementusCore, Warning, TEXT("Reasons:"));
             for (const FGameplayTag& TagIterator : TagContainer)
             {
                 if (TagIterator.IsValid())
                 {
-                    ABILITY_VLOG(Ability, Warning, TEXT("Tag: %s"), *TagIterator.ToString());
+                    UE_VLOG(Ability, LogElementusCore, Warning, TEXT("Tag: %s"), *TagIterator.ToString());
                 }
             }
         }
 
-        ABILITY_VLOG(Ability, Warning, TEXT("================ START OF ABILITY SYSTEM COMPONENT DEBUG INFO ================"));
+        UE_VLOG(Ability, LogElementusCore, Warning, TEXT("================ START OF ABILITY SYSTEM COMPONENT DEBUG INFO ================"));
 
         AbilitySystemComponent->PrintDebug();
 
-        ABILITY_VLOG(Ability, Warning, TEXT("================ END OF ABILITY SYSTEM COMPONENT DEBUG INFO ================"));
+        UE_VLOG(Ability, LogElementusCore, Warning, TEXT("================ END OF ABILITY SYSTEM COMPONENT DEBUG INFO ================"));
     }
 #endif
 }

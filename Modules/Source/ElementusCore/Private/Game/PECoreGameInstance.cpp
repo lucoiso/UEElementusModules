@@ -27,7 +27,7 @@ void UPECoreGameInstance::OnMapLoadingStart(const FString& MapName)
         return;
     }
 
-    UE_LOG(LogElementusCore, Display, TEXT("%s - Loading map: %s"), *FString(__func__), *MapName);
+    UE_LOG(LogElementusCore, Display, TEXT("%s - Loading map: %s"), *FString(__FUNCTION__), *MapName);
 
     FLoadingScreenAttributes LoadingScreen;
     LoadingScreen.bAllowEngineTick = false;
@@ -44,5 +44,5 @@ void UPECoreGameInstance::OnMapLoadingStart(const FString& MapName)
 
 void UPECoreGameInstance::OnMapLoadingComplete(UWorld* InLoadedWorld)
 {
-    UE_LOG(LogElementusCore, Display, TEXT("%s - Map Loaded: %s"), *FString(__func__), *InLoadedWorld->GetMapName());
+    UE_LOG(LogElementusCore, Display, TEXT("%s - Map Loaded: %s"), *FString(__FUNCTION__), *InLoadedWorld->GetMapName());
 }

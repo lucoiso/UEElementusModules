@@ -134,7 +134,7 @@ void APEPlayerController::SetupAbilityBindingByInput_Implementation(UInputAction
 {
     if (!IsValid(Action))
     {
-        CONTROLLER_BASE_VLOG(this, Error, TEXT("%s - Failed to bind ability input for %s with id %d due to invalid Action"), *FString(__func__), *GetName(), InputID);
+        CONTROLLER_BASE_VLOG(this, Error, TEXT("%s - Failed to bind ability input for %s with id %d due to invalid Action"), *FString(__FUNCTION__), *GetName(), InputID);
         return;
     }
 
@@ -170,7 +170,7 @@ void APEPlayerController::ProcessAbilityInputAddition(UInputAction* Action, cons
         return;
     }
 
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Setting up ability input binding for %s with action %s and id %u"), *FString(__func__), *GetName(), *Action->GetName(), InputID);
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Setting up ability input binding for %s with action %s and id %u"), *FString(__FUNCTION__), *GetName(), *Action->GetName(), InputID);
 
     if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent); ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
     {
@@ -192,7 +192,7 @@ void APEPlayerController::ProcessAbilityInputRemoval(const UInputAction* Action)
         return;
     }
 
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Removing ability input binding for %s with action %s"), *FString(__func__), *GetName(), IsValid(Action) ? *Action->GetName() : *FString("NULL"));
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s - Removing ability input binding for %s with action %s"), *FString(__FUNCTION__), *GetName(), IsValid(Action) ? *Action->GetName() : *FString("NULL"));
 
     if (UEnhancedInputComponent* const EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent); ensureAlwaysMsgf(IsValid(EnhancedInputComponent), TEXT("%s have a invalid EnhancedInputComponent"), *GetName()))
     {
@@ -239,19 +239,19 @@ void APEPlayerController::OnAbilityInputPressed(UInputAction* SourceAction)
 {
     if (!IsValid(GetPawn()))
     {
-        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__func__));
+        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__FUNCTION__));
         return;
     }
 
     if (!IsValid(SourceAction))
     {
-        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Action"), *FString(__func__));
+        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Action"), *FString(__FUNCTION__));
         return;
     }
 
     const uint32 InputID = AbilityActionBindings.FindRef(SourceAction).InputID;
 
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Action %s and Input ID Value %u"), *FString(__func__), *SourceAction->GetName(), InputID);
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Action %s and Input ID Value %u"), *FString(__FUNCTION__), *SourceAction->GetName(), InputID);
 
     // Check if controller owner is valid and owns a ability system component
     if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn()); ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
@@ -290,19 +290,19 @@ void APEPlayerController::OnAbilityInputReleased(UInputAction* SourceAction)
 {
     if (!IsValid(GetPawn()))
     {
-        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__func__));
+        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__FUNCTION__));
         return;
     }
 
     if (!IsValid(SourceAction))
     {
-        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Action"), *FString(__func__));
+        CONTROLLER_BASE_VLOG(this, Warning, TEXT("%s called with invalid Action"), *FString(__FUNCTION__));
         return;
     }
 
     const uint32 InputID = AbilityActionBindings.FindRef(SourceAction).InputID;
 
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Action %s and Input ID Value %u"), *FString(__func__), *SourceAction->GetName(), InputID);
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Action %s and Input ID Value %u"), *FString(__FUNCTION__), *SourceAction->GetName(), InputID);
 
     // Check if controller owner is valid and owns a ability system component
     if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetPawn()); ensureAlwaysMsgf(IsValid(TargetABSC), TEXT("%s owner have a invalid AbilitySystemComponent"), *GetName()))
@@ -314,7 +314,7 @@ void APEPlayerController::OnAbilityInputReleased(UInputAction* SourceAction)
 
 void APEPlayerController::SetVoiceChatEnabled(const FInputActionValue& Value) const
 {
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__func__), *Value.ToString(), Value.GetMagnitude());
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__FUNCTION__), *Value.ToString(), Value.GetMagnitude());
 
     // [EOS] Call the static function responsible for activating/deactivating the voice chat
     UPEEOSLibrary::MuteEOSSessionVoiceChatUser(NetPlayerIndex, !Value.Get<bool>());
@@ -322,7 +322,7 @@ void APEPlayerController::SetVoiceChatEnabled(const FInputActionValue& Value) co
 
 void APEPlayerController::OpenInventory(const FInputActionValue& Value)
 {
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__func__), *Value.ToString(), Value.GetMagnitude());
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__FUNCTION__), *Value.ToString(), Value.GetMagnitude());
 
     Client_OpenInventory();
 }
@@ -332,11 +332,11 @@ void APEPlayerController::ChangeCameraAxis(const FInputActionValue& Value)
 {
     if (!IsValid(GetPawnOrSpectator()))
     {
-        CONTROLLER_AXIS_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__func__));
+        CONTROLLER_AXIS_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__FUNCTION__));
         return;
     }
 
-    CONTROLLER_AXIS_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__func__), *Value.ToString(), Value.GetMagnitude());
+    CONTROLLER_AXIS_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__FUNCTION__), *Value.ToString(), Value.GetMagnitude());
 
     const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -348,11 +348,11 @@ void APEPlayerController::Move(const FInputActionValue& Value) const
 {
     if (!IsValid(GetPawnOrSpectator()))
     {
-        CONTROLLER_AXIS_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__func__));
+        CONTROLLER_AXIS_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__FUNCTION__));
         return;
     }
 
-    CONTROLLER_AXIS_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__func__), *Value.ToString(), Value.GetMagnitude());
+    CONTROLLER_AXIS_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__FUNCTION__), *Value.ToString(), Value.GetMagnitude());
 
     if (Value.GetMagnitude() != 0.f && !IsMoveInputIgnored())
     {
@@ -374,11 +374,11 @@ void APEPlayerController::Jump(const FInputActionValue& Value) const
 {
     if (!IsValid(GetPawn()))
     {
-        CONTROLLER_AXIS_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__func__));
+        CONTROLLER_AXIS_VLOG(this, Warning, TEXT("%s called with invalid Pawn"), *FString(__FUNCTION__));
         return;
     }
 
-    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__func__), *Value.ToString(), Value.GetMagnitude());
+    CONTROLLER_BASE_VLOG(this, Display, TEXT("%s called with Input Action Value %s (magnitude %f)"), *FString(__FUNCTION__), *Value.ToString(), Value.GetMagnitude());
 
     if (APECharacter* const ControllerOwner = GetPawn<APECharacter>())
     {
@@ -394,7 +394,7 @@ void APEPlayerController::Client_OpenInventory_Implementation()
 
     if (!IsValid(InventoryUIClass))
     {
-        UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Missing setting: Main Inventory Widget"), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Missing setting: Main Inventory Widget"), *FString(__FUNCTION__));
         return;
     }
 

@@ -60,7 +60,7 @@ void UPEGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInf
         OwningActorName = *ActorInfo->AvatarActor->GetName();
     }
 
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Ability %s given to %s."), *GetName(), *OwningActorName.ToString());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Ability %s given to %s."), *GetName(), *OwningActorName.ToString());
 
     // If the ability failed to activate on granting, will notify the ability system component
     if (bAutoActivateOnGrant && !ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle))
@@ -90,7 +90,7 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
         return;
     }
 
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s is trying to pre-activate ability %s."), *OwningActorName.ToString(), *GetName());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Actor %s is trying to pre-activate ability %s."), *OwningActorName.ToString(), *GetName());
 
     // Cancel the ability if can't commit cost or cooldown. Also cancel if has not auth or is not predicted
     const bool bCanCommitAbility = CommitCheck(Handle, ActorInfo, ActivationInfo);
@@ -123,7 +123,7 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
 
         ActorInfo->AbilitySystemComponent->NotifyAbilityFailed(Handle, this, FailureTags);
 
-        PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s failed to pre-activate ability %s."), *OwningActorName.ToString(), *GetName());
+        PEUE_VLOG_INTERNAL(this, Display, TEXT("Actor %s failed to pre-activate ability %s."), *OwningActorName.ToString(), *GetName());
 
         CancelAbility(Handle, ActorInfo, ActivationInfo, true);
         return;
@@ -162,7 +162,7 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
     {
         FTimerDelegate TimerDelegate;
         TimerDelegate.BindLambda(
-            [=]() -> void
+            [=, this]() -> void
             {
                 if (IsValid(this) && IsActive())
                 {
@@ -177,7 +177,7 @@ void UPEGameplayAbility::PreActivate(const FGameplayAbilitySpecHandle Handle, co
 
 void UPEGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s activated ability %s."), *OwningActorName.ToString(), *GetName());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Actor %s activated ability %s."), *OwningActorName.ToString(), *GetName());
 
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
@@ -194,7 +194,7 @@ void UPEGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, con
         ActorInfo = GetCurrentActorInfo();
     }
 
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s' ability %s has been finalized."), *OwningActorName.ToString(), *GetName());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Actor %s' ability %s has been finalized."), *OwningActorName.ToString(), *GetName());
 
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
@@ -399,7 +399,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
 
     if (GameplayCueTag.IsValid())
     {
-        PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Activating %s ability associated Gameplay Cues with Tag %s for actor %s."), *GetName(), *GameplayCueTag.ToString(), *OwningActorName.ToString());
+        PEUE_VLOG_INTERNAL(this, Display, TEXT("Activating %s ability associated Gameplay Cues with Tag %s for actor %s."), *GetName(), *GameplayCueTag.ToString(), *OwningActorName.ToString());
 
         Parameters.AbilityLevel = GetAbilityLevel();
         Parameters.Instigator = SourceAbilitySystem->GetAvatarActor();
@@ -413,7 +413,7 @@ void UPEGameplayAbility::ActivateGameplayCues(const FGameplayTag GameplayCueTag,
     }
     else
     {
-        PEABILITY_VLOG_INTERNAL(this, Warning, TEXT("Ability %s failed to activate Gameplay Cue for actor %s."), *GetName(), *OwningActorName.ToString());
+        PEUE_VLOG_INTERNAL(this, Warning, TEXT("Ability %s failed to activate Gameplay Cue for actor %s."), *GetName(), *OwningActorName.ToString());
     }
 }
 
@@ -426,7 +426,7 @@ void UPEGameplayAbility::BP_ApplyAbilityEffectsToSelf()
 
 void UPEGameplayAbility::ApplyAbilityEffectsToSelf(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to actor %s."), *GetName(), *OwningActorName.ToString());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Applying %s ability effects to actor %s."), *GetName(), *OwningActorName.ToString());
 
     for (const FGameplayEffectGroupedData& EffectGroup : SelfAbilityEffects)
     {
@@ -448,7 +448,7 @@ void UPEGameplayAbility::BP_RemoveAbilityEffectsFromSelf()
 
 void UPEGameplayAbility::RemoveAbilityEffectsFromSelf(const FGameplayAbilityActorInfo* ActorInfo)
 {
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability effects from actor %s."), *GetName(), *OwningActorName.ToString());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability effects from actor %s."), *GetName(), *OwningActorName.ToString());
 
     for (const FGameplayEffectGroupedData& EffectGroup : SelfAbilityEffects)
     {
@@ -468,7 +468,7 @@ void UPEGameplayAbility::BP_ApplyAbilityEffectsToTarget(const FGameplayAbilityTa
 
 void UPEGameplayAbility::ApplyAbilityEffectsToTarget(const FGameplayAbilityTargetDataHandle TargetDataHandle, const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-    PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Actor %s is applying %s ability effects to targets."), *OwningActorName.ToString(), *GetName());
+    PEUE_VLOG_INTERNAL(this, Display, TEXT("Actor %s is applying %s ability effects to targets."), *OwningActorName.ToString(), *GetName());
 
     for (const FGameplayEffectGroupedData& EffectGroup : TargetAbilityEffects)
     {
@@ -502,7 +502,7 @@ void UPEGameplayAbility::RemoveCooldownEffect(UAbilitySystemComponent* SourceAbi
 {
     if (IsValid(GetCooldownGameplayEffect()))
     {
-        PEABILITY_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability cooldown from actor %s."), *GetName(), *OwningActorName.ToString());
+        PEUE_VLOG_INTERNAL(this, Display, TEXT("Removing %s ability cooldown from actor %s."), *GetName(), *OwningActorName.ToString());
         SourceAbilitySystem->RemoveActiveGameplayEffectBySourceEffect(CooldownGameplayEffectClass, SourceAbilitySystem);
     }
 }
@@ -511,13 +511,13 @@ void UPEGameplayAbility::PlayAbilitySoundAttached(USceneComponent* InComponent, 
 {
     if (!IsValid(AbilitySoundData.AbilitySoundFX))
     {
-        PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null sound object."), *OwningActorName.ToString(), *GetName());
+        PEUE_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null sound object."), *OwningActorName.ToString(), *GetName());
         return;
     }
 
     if (!IsValid(InComponent))
     {
-        PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null scene component target."), *OwningActorName.ToString(), *GetName());
+        PEUE_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null scene component target."), *OwningActorName.ToString(), *GetName());
         return;
     }
 
@@ -528,7 +528,7 @@ void UPEGameplayAbility::PlayAbilitySoundAtLocation(const UObject* WorldContext,
 {
     if (!IsValid(AbilitySoundData.AbilitySoundFX))
     {
-        PEABILITY_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null sound object."), *OwningActorName.ToString(), *GetName());
+        PEUE_VLOG_INTERNAL(this, Error, TEXT("Actor %s tried to play ability %s sound with a null sound object."), *OwningActorName.ToString(), *GetName());
         return;
     }
 

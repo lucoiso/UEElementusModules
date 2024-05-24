@@ -34,7 +34,7 @@ APEPlayerState::APEPlayerState(const FObjectInitializer& ObjectInitializer) : Su
 
 void APEPlayerState::BeginPlay()
 {
-    PLAYERSTATE_VLOG(this, Display, TEXT("%s called."), *FString(__func__));
+    PLAYERSTATE_VLOG(this, Display, TEXT("%s called."), *FString(__FUNCTION__));
 
     Super::BeginPlay();
 
@@ -54,7 +54,7 @@ void APEPlayerState::DeathStateChanged_Callback(const FGameplayTag CallbackTag, 
         return;
     }
 
-    PLAYERSTATE_VLOG(this, Display, TEXT("%s called with %s Callback Tag and NewCount equal to %d"), *FString(__func__), *CallbackTag.ToString(), NewCount);
+    PLAYERSTATE_VLOG(this, Display, TEXT("%s called with %s Callback Tag and NewCount equal to %d"), *FString(__FUNCTION__), *CallbackTag.ToString(), NewCount);
 
     // If death tag != 0, the player is dead
     if (NewCount == 0)
@@ -83,7 +83,7 @@ void APEPlayerState::StunStateChanged_Callback(const FGameplayTag CallbackTag, c
         return;
     }
 
-    PLAYERSTATE_VLOG(this, Display, TEXT("%s called with %s Callback Tag and NewCount equal to %d"), *FString(__func__), *CallbackTag.ToString(), NewCount);
+    PLAYERSTATE_VLOG(this, Display, TEXT("%s called with %s Callback Tag and NewCount equal to %d"), *FString(__FUNCTION__), *CallbackTag.ToString(), NewCount);
 
     // Just ignore/activate movement inputs if have a valid player controller
     if (ensureAlwaysMsgf(IsValid(GetPlayerController()), TEXT("%s have a invalid Player"), *GetName()))

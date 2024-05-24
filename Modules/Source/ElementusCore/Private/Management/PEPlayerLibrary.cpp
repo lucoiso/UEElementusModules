@@ -12,7 +12,7 @@ FPlayerInputBindingHandle UPEPlayerLibrary::BindDynamicInput(APlayerController* 
 {
     if (!IsValid(Controller) || !IsValid(Action) || !IsValid(Object))
     {
-        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid Controller, Action or Object."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid Controller, Action or Object."), *FString(__FUNCTION__));
         return FPlayerInputBindingHandle{};
     }
 
@@ -29,7 +29,7 @@ void UPEPlayerLibrary::RemoveDynamicInput(const FPlayerInputBindingHandle Bindin
 {
     if (!IsValid(BindingHandle.PlayerController))
     {
-        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller."), *FString(__FUNCTION__));
         return;
     }
 
@@ -44,7 +44,7 @@ void UPEPlayerLibrary::AddDynamicMapping(APlayerController* Controller, UInputMa
 {
     if (!IsValid(Controller) || !InputMapping)
     {
-        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller or input mapping."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller or input mapping."), *FString(__FUNCTION__));
         return;
     }
 
@@ -61,7 +61,7 @@ void UPEPlayerLibrary::RemoveDynamicMapping(APlayerController* Controller, UInpu
 {
     if (!IsValid(Controller) || !InputMapping)
     {
-        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller or input mapping."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller or input mapping."), *FString(__FUNCTION__));
         return;
     }
 
@@ -78,7 +78,7 @@ bool UPEPlayerLibrary::CheckIfPlayerContainsDynamicInput(APlayerController* Cont
 {
     if (BindingArray.IsEmpty() || !IsValid(Controller))
     {
-        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller or empty binding array."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid controller or empty binding array."), *FString(__FUNCTION__));
         return false;
     }
 
@@ -98,7 +98,7 @@ FVector UPEPlayerLibrary::GetSocketLocationInChildMeshes(const USkeletalMeshComp
 {
     if (SocketName.IsNone())
     {
-        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid socket name"), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Warning, TEXT("%s - Invalid socket name"), *FString(__FUNCTION__));
         return FVector::Zero();
     }
 

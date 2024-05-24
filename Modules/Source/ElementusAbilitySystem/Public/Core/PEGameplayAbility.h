@@ -15,13 +15,13 @@ class AGameplayAbilityTargetActor;
 class APEAbilityProjectile;
 struct FPETargetActorSpawnParams;
 
-#define PEABILITY_VLOG(Actor, Verbosity, Format, ...) \
+#define PEUE_VLOG(Actor, Verbosity, Format, ...) \
 { \
 	UE_LOG(LogElementusAbilitySystem, Verbosity, Format, ##__VA_ARGS__); \
 	UE_VLOG(Actor, LogElementusAbilitySystem, Verbosity, Format, ##__VA_ARGS__); \
 }
 
-#define PEABILITY_VLOG_INTERNAL(Actor, Verbosity, Format, ...) \
+#define PEUE_VLOG_INTERNAL(Actor, Verbosity, Format, ...) \
 { \
 	UE_LOG(LogElementusAbilitySystem_Internal, Verbosity, Format, ##__VA_ARGS__); \
 	UE_VLOG(Actor, LogElementusAbilitySystem_Internal, Verbosity, Format, ##__VA_ARGS__); \

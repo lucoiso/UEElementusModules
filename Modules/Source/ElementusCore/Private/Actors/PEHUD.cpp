@@ -40,7 +40,7 @@ void APEHUD::BeginPlay()
 
         if (!IsValid(UMGHUDClass))
         {
-            UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Missing setting: HUD Class"), *FString(__func__));
+            UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Missing setting: HUD Class"), *FString(__FUNCTION__));
             return;
         }
 
@@ -55,25 +55,25 @@ void APEHUD::BeginPlay()
         }
         else
         {
-            UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Failed to initialize UMG HUD"), *FString(__func__));
+            UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - Failed to initialize UMG HUD"), *FString(__FUNCTION__));
         }
     }
 }
 
 #define REGISTER_ATTRIBUTE_DELEGATE(AttributeClass, AttributeName, ViewModelClass, ViewModelObject) \
-if (TargetABSC->GetGameplayAttributeValueChangeDelegate(##AttributeClass##::Get##AttributeName##Attribute()).IsBoundToObject(this)) \
+if (TargetABSC->GetGameplayAttributeValueChangeDelegate(AttributeClass::Get##AttributeName##Attribute()).IsBoundToObject(this)) \
 { \
-	TargetABSC->GetGameplayAttributeValueChangeDelegate(##AttributeClass##::Get##AttributeName##Attribute()).RemoveAll(this); \
+	TargetABSC->GetGameplayAttributeValueChangeDelegate(AttributeClass::Get##AttributeName##Attribute()).RemoveAll(this); \
 } \
-TargetABSC->GetGameplayAttributeValueChangeDelegate(##AttributeClass##::Get##AttributeName##Attribute()).AddUObject(this, &APEHUD::OnViewModelAttributeChange); \
+TargetABSC->GetGameplayAttributeValueChangeDelegate(AttributeClass::Get##AttributeName##Attribute()).AddUObject(this, &APEHUD::OnViewModelAttributeChange); \
 /* This block is used to initialize the first value of the attribute because the viewmodel is only updating when the attribute changes after the binding occurs */ \
 { \
-	NotifyAttributeChange(##AttributeClass##::Get##AttributeName##Attribute(), TargetABSC->GetNumericAttribute(##AttributeClass##::Get##AttributeName##Attribute())); \
+	NotifyAttributeChange(AttributeClass::Get##AttributeName##Attribute(), TargetABSC->GetNumericAttribute(AttributeClass::Get##AttributeName##Attribute())); \
 }
 
 void APEHUD::InitializeAttributeViewModels()
 {
-    UE_LOG(LogElementusCore_Internal, Display, TEXT("%s - Initializing attribute view models"), *FString(__func__));
+    UE_LOG(LogElementusCore_Internal, Display, TEXT("%s - Initializing attribute view models"), *FString(__FUNCTION__));
 
     if (UAbilitySystemComponent* const TargetABSC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetOwningPlayerController()))
     {

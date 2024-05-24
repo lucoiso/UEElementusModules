@@ -36,7 +36,7 @@ void UPESpawnProjectile_Task::Activate()
         EndTask();
     }
 
-    if (ensureAlwaysMsgf(ProjectileClass != nullptr, TEXT("%s - Task %s failed to activate because projectile class is null"), *FString(__func__), *GetName()))
+    if (ensureAlwaysMsgf(ProjectileClass != nullptr, TEXT("%s - Task %s failed to activate because projectile class is null"), *FString(__FUNCTION__), *GetName()))
     {
         APEAbilityProjectile* const SpawnedProjectile = GetWorld()->SpawnActorDeferred<APEAbilityProjectile>(ProjectileClass, ProjectileTransform, GetOwnerActor(), nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 

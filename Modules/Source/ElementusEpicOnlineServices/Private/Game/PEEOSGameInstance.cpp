@@ -72,13 +72,13 @@ void UPEEOSGameInstance::OnVoiceChatInitialized(const FVoiceChatResult& Result)
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__func__), Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__FUNCTION__), Result.IsSuccess())
 
             ConnectVoiceChatFramework();
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatInitializeCompleteDelegate.Unbind();
@@ -88,11 +88,11 @@ void UPEEOSGameInstance::OnVoiceChatUninitialized(const FVoiceChatResult& Result
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__func__), Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__FUNCTION__), Result.IsSuccess())
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatUninitializeCompleteDelegate.Unbind();
@@ -102,11 +102,11 @@ void UPEEOSGameInstance::OnVoiceChatConnected(const FVoiceChatResult& Result)
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__func__), Result.IsSuccess());
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__FUNCTION__), Result.IsSuccess());
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatConnectCompleteDelegate.Unbind();
@@ -116,11 +116,11 @@ void UPEEOSGameInstance::OnVoiceChatDisconnected(const FVoiceChatResult& Result)
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__func__), Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d"), *FString(__FUNCTION__), Result.IsSuccess())
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatDisconnectCompleteDelegate.Unbind();
@@ -160,13 +160,13 @@ void UPEEOSGameInstance::OnVoiceChatLogin(const FString& PlayerName, const FVoic
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d"), *FString(__func__), *PlayerName, Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d"), *FString(__FUNCTION__), *PlayerName, Result.IsSuccess())
 
             ConnectVoiceChatFramework();
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), Result.IsSuccess(), *PlayerName, *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), *PlayerName, Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatLoginCompleteDelegate.Unbind();
@@ -176,11 +176,11 @@ void UPEEOSGameInstance::OnVoiceChatLogout(const FString& PlayerName, const FVoi
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d"), *FString(__func__), *PlayerName, Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d"), *FString(__FUNCTION__), *PlayerName, Result.IsSuccess())
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), Result.IsSuccess(), *PlayerName, *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Player Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), *PlayerName, Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatLogoutCompleteDelegate.Unbind();
@@ -188,7 +188,7 @@ void UPEEOSGameInstance::OnVoiceChatLogout(const FString& PlayerName, const FVoi
 
 void UPEEOSGameInstance::ConnectVoiceChatToSessionChannel(const int32 LocalUserNum, const FString& ChannelName, const FEOSVoiceChatChannelCredentials Credentials, const EEOSVoiceChatChannelType ChannelType)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Channel Name: %s"), *FString(__func__), LocalUserNum, *ChannelName);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Channel Name: %s"), *FString(__FUNCTION__), LocalUserNum, *ChannelName);
 
     if (FEOSVoiceChatUser* const VoiceChatUserPtr = UPEEOSLibrary::GetEOSVoiceChatUser(LocalUserNum))
     {
@@ -203,7 +203,7 @@ void UPEEOSGameInstance::ConnectVoiceChatToSessionChannel(const int32 LocalUserN
 
 void UPEEOSGameInstance::LeaveVoiceChatSessionChannel(const int32 LocalUserNum, const FString& ChannelName)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Channel Name: %s"), *FString(__func__), LocalUserNum, *ChannelName);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Local User Num: %d; Channel Name: %s"), *FString(__FUNCTION__), LocalUserNum, *ChannelName);
 
     if (FEOSVoiceChatUser* const VoiceChatUserPtr = UPEEOSLibrary::GetEOSVoiceChatUser(LocalUserNum))
     {
@@ -216,11 +216,11 @@ void UPEEOSGameInstance::OnVoiceChatChannelJoined(const FString& ChannelName, co
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d"), *FString(__func__), *ChannelName, Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d"), *FString(__FUNCTION__), *ChannelName, Result.IsSuccess())
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), *ChannelName, Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), *ChannelName, Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatChannelJoinCompleteDelegate.Unbind();
@@ -230,11 +230,11 @@ void UPEEOSGameInstance::OnVoiceChatChannelLeft(const FString& ChannelName, cons
 {
     if (Result.IsSuccess())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d"), *FString(__func__), *ChannelName, Result.IsSuccess())
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d"), *FString(__FUNCTION__), *ChannelName, Result.IsSuccess())
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__func__), *ChannelName, Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Log, TEXT("%s - Channel Name: %s; Result: %d - Error Code: %s; Error Description: %s"), *FString(__FUNCTION__), *ChannelName, Result.IsSuccess(), *Result.ErrorCode, *Result.ErrorDesc);
     }
 
     OnVoiceChatChannelLeaveCompleteDelegate.Unbind();
@@ -353,7 +353,7 @@ bool UPEEOSGameInstance::EOS_DestroySession()
 
 void UPEEOSGameInstance::OnSessionCreated(const FName SessionName, const bool bResult)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Session: %s; Result: %d"), *FString(__func__), *SessionName.ToString(), bResult);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Session: %s; Result: %d"), *FString(__FUNCTION__), *SessionName.ToString(), bResult);
 
     if (const IOnlineSessionPtr SessionInterface = UPEEOSLibrary::GetSessionInterface())
     {
@@ -375,7 +375,7 @@ void UPEEOSGameInstance::OnSessionsFound(const bool bResult)
 
     if (EOSSearchSettings.IsValid())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Result: %d - Sessions found: %d"), *FString(__func__), bResult, EOSSearchSettings->SearchResults.Num());
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Result: %d - Sessions found: %d"), *FString(__FUNCTION__), bResult, EOSSearchSettings->SearchResults.Num());
 
         TArray<FSessionDataHandler> SessionDataHandle_Arr;
 
@@ -392,13 +392,13 @@ void UPEEOSGameInstance::OnSessionsFound(const bool bResult)
     }
     else
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Result: %d - No sessions found"), *FString(__func__), bResult);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Result: %d - No sessions found"), *FString(__FUNCTION__), bResult);
     }
 }
 
 void UPEEOSGameInstance::OnCancelFindSessions(const bool bResult)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Result: %d"), *FString(__func__), bResult);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Result: %d"), *FString(__FUNCTION__), bResult);
 
     if (const IOnlineSessionPtr SessionInterface = UPEEOSLibrary::GetSessionInterface())
     {
@@ -415,7 +415,7 @@ void UPEEOSGameInstance::OnCancelFindSessions(const bool bResult)
 
 void UPEEOSGameInstance::OnSessionJoined(const FName SessionName, const EOnJoinSessionCompleteResult::Type Result)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Session: %s; Result: %d"), *FString(__func__), *SessionName.ToString(), Result);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Session: %s; Result: %d"), *FString(__FUNCTION__), *SessionName.ToString(), Result);
 
     if (const IOnlineSessionPtr SessionInterface = UPEEOSLibrary::GetSessionInterface())
     {
@@ -433,7 +433,7 @@ void UPEEOSGameInstance::OnSessionJoined(const FName SessionName, const EOnJoinS
 
 void UPEEOSGameInstance::OnSessionDestroyed(const FName SessionName, const bool bResult)
 {
-    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Session: %s; Result: %d"), *FString(__func__), *SessionName.ToString(), bResult);
+    UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - Session: %s; Result: %d"), *FString(__FUNCTION__), *SessionName.ToString(), bResult);
 
     if (const IOnlineSessionPtr SessionInterface = UPEEOSLibrary::GetSessionInterface())
     {
@@ -502,7 +502,7 @@ void UPEEOSGameInstance::OnLoginComplete(const int32 LocalUserNum, const bool bW
 
     if (const IOnlineIdentityPtr IdentityInterface = UPEEOSLibrary::GetIdentityInterface(OnlineSubsystem))
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - LocalUserNum: %d; bWasSuccessful: %d"), *FString(__func__), LocalUserNum, bWasSuccessful);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - LocalUserNum: %d; bWasSuccessful: %d"), *FString(__FUNCTION__), LocalUserNum, bWasSuccessful);
 
         IdentityInterface->ClearOnLoginCompleteDelegates(LocalUserNum, this);
 
@@ -520,7 +520,7 @@ void UPEEOSGameInstance::OnLogoutComplete(const int32 LocalUserNum, const bool b
 {
     if (const IOnlineIdentityPtr IdentityInterface = UPEEOSLibrary::GetIdentityInterface())
     {
-        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - LocalUserNum: %d; bWasSuccessful: %d"), *FString(__func__), LocalUserNum, bWasSuccessful);
+        UE_LOG(LogElementusEpicOnlineServices_Internal, Warning, TEXT("%s - LocalUserNum: %d; bWasSuccessful: %d"), *FString(__FUNCTION__), LocalUserNum, bWasSuccessful);
 
         IdentityInterface->ClearOnLogoutCompleteDelegates(LocalUserNum, this);
 

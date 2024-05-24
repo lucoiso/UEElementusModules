@@ -9,7 +9,7 @@ public class ElementusAbilitySystem : ModuleRules
     public ElementusAbilitySystem(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-        CppStandard = CppStandardVersion.Cpp17;
+        CppStandard = CppStandardVersion.Cpp20;
 
         PublicDependencyModuleNames.AddRange(new[]
         {

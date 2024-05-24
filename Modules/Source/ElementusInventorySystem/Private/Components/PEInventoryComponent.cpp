@@ -76,7 +76,7 @@ UPEEquipment* UPEInventoryComponent::LoadEquipamentAsset(const FPrimaryElementus
         return Cast<UPEEquipment>(ItemData->ItemClass.LoadSynchronous()->GetDefaultObject());
     }
 
-    UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to load item %s"), *FString(__func__), *ItemId.ToString())
+    UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to load item %s"), *FString(__FUNCTION__), *ItemId.ToString())
 
         return nullptr;
 }
@@ -85,19 +85,19 @@ bool UPEInventoryComponent::CheckInventoryAndItem(const FElementusItemInfo& InIt
 {
     if (!IsValid(GetOwner()))
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Invalid owning actor"), *FString(__func__));
+        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Invalid owning actor"), *FString(__FUNCTION__));
         return false;
     }
 
     if (!ContainsItem(InItem, true))
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - The item %s is not in the %s's inventory"), *FString(__func__), *InItem.ItemId.ToString(), *GetOwner()->GetName());
+        UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - The item %s is not in the %s's inventory"), *FString(__FUNCTION__), *InItem.ItemId.ToString(), *GetOwner()->GetName());
         return false;
     }
 
     if (!GetOwner()->GetClass()->IsChildOf<ACharacter>())
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Owning actor isn't a Character"), *FString(__func__));
+        UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Owning actor isn't a Character"), *FString(__FUNCTION__));
         return false;
     }
 
@@ -127,7 +127,7 @@ bool UPEInventoryComponent::TryEquipItem_Internal(const FElementusItemInfo& InIt
         if (int32 FoundTagIndex; FindFirstItemIndexWithTags(EquipmentSlotTags, FoundTagIndex, FGameplayTagContainer::EmptyContainer))
         {
             // Already equipped
-            UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Actor %s has already unequipped item %s"), *FString(__func__), *GetOwner()->GetName(), *InItem.ItemId.ToString());
+            UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Actor %s has already unequipped item %s"), *FString(__FUNCTION__), *GetOwner()->GetName(), *InItem.ItemId.ToString());
 
             UnequipItem(GetItemReferenceAt(FoundTagIndex));
         }
@@ -143,11 +143,11 @@ bool UPEInventoryComponent::TryEquipItem_Internal(const FElementusItemInfo& InIt
                 EquipmentMap.Add(Iterator, InItem);
             }
 
-            UE_LOG(LogElementusInventorySystem, Display, TEXT("%s - Actor %s equipped %s"), *FString(__func__), *GetOwner()->GetName(), *InItem.ItemId.ToString());
+            UE_LOG(LogElementusInventorySystem, Display, TEXT("%s - Actor %s equipped %s"), *FString(__FUNCTION__), *GetOwner()->GetName(), *InItem.ItemId.ToString());
         }
         else
         {
-            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Failed to find item %s in %s's inventory"), *FString(__func__), *InItem.ItemId.ToString(), *GetOwner()->GetName());
+            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Failed to find item %s in %s's inventory"), *FString(__FUNCTION__), *InItem.ItemId.ToString(), *GetOwner()->GetName());
             UElementusInventoryFunctions::UnloadElementusItem(InItem.ItemId);
             return false;
         }
@@ -178,7 +178,7 @@ bool UPEInventoryComponent::TryUnequipItem_Internal(FElementusItemInfo& InItem)
 
         InItem.Tags.RemoveTags(EquipmentSlotTags);
 
-        UE_LOG(LogElementusInventorySystem, Display, TEXT("%s - Actor %s unequipped %s"), *FString(__func__), *GetOwner()->GetName(), *InItem.ItemId.ToString());
+        UE_LOG(LogElementusInventorySystem, Display, TEXT("%s - Actor %s unequipped %s"), *FString(__FUNCTION__), *GetOwner()->GetName(), *InItem.ItemId.ToString());
 
         UElementusInventoryFunctions::UnloadElementusItem(InItem.ItemId);
         return true;
@@ -238,17 +238,17 @@ void UPEInventoryComponent::AddEquipmentGASData_Server_Implementation(UPEAbility
     {
         if (InInputID_Name.IsNone())
         {
-            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid InputID"), *FString(__func__));
+            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid InputID"), *FString(__FUNCTION__));
             continue;
         }
 
         if (!IsValid(InAbilityClass))
         {
-            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid Ability Class"), *FString(__func__));
+            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid Ability Class"), *FString(__FUNCTION__));
             continue;
         }
 
-        UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Binding ability %s with InputId %s"), *FString(__func__), *InAbilityClass->GetName(), *InInputID_Name.ToString());
+        UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Binding ability %s with InputId %s"), *FString(__FUNCTION__), *InAbilityClass->GetName(), *InInputID_Name.ToString());
         UPEAbilityFunctions::GiveAbility(TargetABSC, InAbilityClass, InInputID_Name, InputIdEnum, false, true);
     }
 }
@@ -266,17 +266,17 @@ void UPEInventoryComponent::RemoveEquipmentGASData_Server_Implementation(UPEAbil
     {
         if (InInputID_Name.IsNone())
         {
-            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid InputID"), *FString(__func__));
+            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid InputID"), *FString(__FUNCTION__));
             continue;
         }
 
         if (!IsValid(InAbilityClass))
         {
-            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid Ability Class"), *FString(__func__));
+            UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - Invalid Ability Class"), *FString(__FUNCTION__));
             continue;
         }
 
-        UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Removing ability %s with InputId %s"), *FString(__func__), *InAbilityClass->GetName(), *InInputID_Name.ToString());
+        UE_LOG(LogElementusInventorySystem_Internal, Display, TEXT("%s - Removing ability %s with InputId %s"), *FString(__FUNCTION__), *InAbilityClass->GetName(), *InInputID_Name.ToString());
         UPEAbilityFunctions::RemoveAbility(TargetABSC, InAbilityClass);
     }
 }
@@ -291,7 +291,7 @@ void UPEInventoryComponent::ProcessEquipmentAttachment_Multicast_Implementation(
     USkeletalMeshComponent* const InMesh = NewObject<USkeletalMeshComponent>(GetOwner(), USkeletalMeshComponent::StaticClass(), *Equipment->GetName());
     if (!IsValid(InMesh))
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to create skeletal mesh"), *FString(__func__));
+        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to create skeletal mesh"), *FString(__FUNCTION__));
         return;
     }
 
@@ -303,7 +303,7 @@ void UPEInventoryComponent::ProcessEquipmentAttachment_Multicast_Implementation(
 
     if (!InMesh->AttachToComponent(TargetMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, Equipment->SocketToAttach))
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to attach mesh to character"), *FString(__func__));
+        UE_LOG(LogElementusInventorySystem_Internal, Error, TEXT("%s - Failed to attach mesh to character"), *FString(__FUNCTION__));
     }
 
     GetOwner()->FinishAndRegisterComponent(InMesh);
@@ -320,7 +320,7 @@ void UPEInventoryComponent::ProcessEquipmentDettachment_Multicast_Implementation
 
     if (CompArr.IsEmpty())
     {
-        UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - %s have no equipment attached"), *FString(__func__), *GetOwner()->GetName());
+        UE_LOG(LogElementusInventorySystem_Internal, Warning, TEXT("%s - %s have no equipment attached"), *FString(__FUNCTION__), *GetOwner()->GetName());
         return;
     }
 

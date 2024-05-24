@@ -80,7 +80,7 @@ void UPEGameSettings::SetFSREnabled(const bool bEnable)
 {
     if (!IsFSREnabled())
     {
-        UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - FSR 1.0 plugin not found."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - FSR 1.0 plugin not found."), *FString(__FUNCTION__));
         return;
     }
 
@@ -96,7 +96,7 @@ void UPEGameSettings::SetFSRMode(const int32 InMode)
 {
     if (!IsFSREnabled())
     {
-        UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - FSR 1.0 plugin not found."), *FString(__func__));
+        UE_LOG(LogElementusCore_Internal, Error, TEXT("%s - FSR 1.0 plugin not found."), *FString(__FUNCTION__));
         return;
     }
 
